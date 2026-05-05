@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IMAGE-E-NATION By 6i9 | Photographe Professionnel</title>
+  <meta name="description" content="Photographe professionnel pour tous types d'événements. Mariages, portraits, corporate, concerts et plus. IMAGE-E-NATION By 6i9 — Montréal.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
+  <div class="cursor-follower" id="cursor-follower" aria-hidden="true"></div>
+
+  <!-- Page Loader -->
+  <div class="loader" id="loader" role="status" aria-label="Chargement">
+    <div class="loader-inner">
+      <div class="loader-brand">IMAGE-E-NATION</div>
+      <div class="loader-sub">By 6i9</div>
+      <div class="loader-bar"><div class="loader-progress" id="loader-progress"></div></div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Navigation principale">
+    <a href="#hero" class="nav-brand" aria-label="Accueil IMAGE-E-NATION By 6i9">
+      <span class="brand-main">IMAGE-E-NATION</span>
+      <span class="brand-sub">By 6i9</span>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <a href="#about"        class="nav-link">À Propos</a>
+      <a href="#services"     class="nav-link">Services</a>
+      <a href="#portfolio"    class="nav-link">Portfolio</a>
+      <a href="#testimonials" class="nav-link">Avis</a>
+      <a href="#contact"      class="nav-link nav-cta">Réserver</a>
+    </div>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ╔══════════════════════════════════════╗
+       ║             HERO SECTION             ║
+       ╚══════════════════════════════════════╝ -->
+  <section id="hero" class="hero">
+    <div class="hero-bg" id="hero-bg">
+      <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1920&q=85" alt="Photographie professionnelle" fetchpriority="high">
+      <div class="hero-overlay"></div>
+      <div class="hero-grain"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow animate-hero" data-delay="200">Photographe Professionnel</div>
+      <h1 class="hero-title">
+        <span class="hero-line animate-hero" data-delay="400">IMAGE-E-NATION</span>
+        <span class="hero-line hero-line--accent animate-hero" data-delay="600">By 6i9</span>
+      </h1>
+      <p class="hero-desc animate-hero" data-delay="800">
+        Chaque instant figé dans le temps.<br>Chaque émotion capturée pour l'éternité.
+      </p>
+      <div class="hero-actions animate-hero" data-delay="1000">
+        <a href="#portfolio" class="btn btn-primary">
+          <span>Voir le Portfolio</span>
+        </a>
+        <a href="#contact" class="btn btn-ghost">
+          <span>Prendre Rendez-vous</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-scroll" aria-hidden="true">
+      <span class="hero-scroll-text">Défiler</span>
+      <div class="hero-scroll-line"><div class="hero-scroll-dot"></div></div>
+    </div>
+
+    <div class="hero-badge" aria-hidden="true">
+      <div class="badge-ring">
+        <svg viewBox="0 0 180 180" class="badge-svg">
+          <defs>
+            <path id="txt-circle" d="M90,90 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1-144,0"/>
+          </defs>
+          <text class="badge-svg-text">
+            <textPath href="#txt-circle">DISPONIBLE POUR TOUS ÉVÉNEMENTS • CONTACTEZ-NOUS • </textPath>
+          </text>
+        </svg>
+        <div class="badge-center">6i9</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════╗
+       ║             ABOUT SECTION            ║
+       ╚══════════════════════════════════════╝ -->
+  <section id="about" class="about section">
+    <div class="container">
+      <div class="about-grid">
+
+        <div class="about-visuals">
+          <div class="about-img-main reveal-left">
+            <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=700&q=80" alt="Photographe en action" loading="lazy">
+          </div>
+          <div class="about-img-second reveal-left" data-delay="150">
+            <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=450&q=80" alt="Appareil photo professionnel" loading="lazy">
+          </div>
+          <div class="about-kpi reveal-up" data-delay="300">
+            <div class="kpi-num">+500</div>
+            <div class="kpi-label">Événements</div>
+          </div>
+        </div>
+
+        <div class="about-text-col reveal-right">
+          <div class="section-eyebrow">Notre Histoire</div>
+          <h2 class="section-title">L'Art de<br><em>Capturer l'Instant</em></h2>
+          <p class="about-body">
+            IMAGE-E-NATION By 6i9 est bien plus qu'un service de photographie — c'est une vision artistique dédiée à immortaliser vos moments les plus précieux. Avec une passion pour la lumière, la composition et l'émotion authentique, nous transformons chaque prise de vue en œuvre d'art intemporelle.
+          </p>
+          <p class="about-body">
+            Que ce soit pour un mariage grandiose, un portrait intime, un événement corporate ou un concert électrisant, notre expertise technique et notre sensibilité artistique garantissent des résultats qui vous laisseront sans voix.
+          </p>
+          <div class="about-sig">— 6i9, Fondateur &amp; Photographe Principal</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════╗
+       ║           SERVICES SECTION           ║
+       ╚══════════════════════════════════════╝ -->
+  <section id="services" class="services section">
+    <div class="container">
+      <div class="section-header reveal-up">
+        <div class="section-eyebrow">Ce Que Nous Offrons</div>
+        <h2 class="section-title">Nos <em>Services</em></h2>
+        <p class="section-sub">Une expertise photographique adaptée à chaque événement</p>
+      </div>
+
+      <div class="services-grid">
+
+        <div class="svc-card reveal-up" data-delay="0">
+          <div class="svc-num">01</div>
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+          <h3 class="svc-title">Mariages</h3>
+          <p class="svc-desc">Immortalisez le plus beau jour de votre vie avec des photos qui racontent votre histoire d'amour unique.</p>
+          <div class="svc-bg">
+            <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=500&q=70" alt="" loading="lazy" aria-hidden="true">
+          </div>
+        </div>
+
+        <div class="svc-card reveal-up" data-delay="80">
+          <div class="svc-num">02</div>
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+            </svg>
+          </div>
+          <h3 class="svc-title">Portraits</h3>
+          <p class="svc-desc">Des portraits authentiques qui capturent votre personnalité et révèlent votre lumière intérieure.</p>
+          <div class="svc-bg">
+            <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&q=70" alt="" loading="lazy" aria-hidden="true">
+          </div>
+        </div>
+
+        <div class="svc-card reveal-up" data-delay="160">
+          <div class="svc-num">03</div>
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+            </svg>
+          </div>
+          <h3 class="svc-title">Corporate</h3>
+          <p class="svc-desc">Conférences, lancements, galas — nous sublimez votre image professionnelle et institutionnelle.</p>
+          <div class="svc-bg">
+            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&q=70" alt="" loading="lazy" aria-hidden="true">
+          </div>
+        </div>
+
+        <div class="svc-card reveal-up" data-delay="240">
+          <div class="svc-num">04</div>
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+            </svg>
+          </div>
+          <h3 class="svc-title">Concerts &amp; Spectacles</h3>
+          <p class="svc-desc">L'énergie, la lumière, le mouvement — capturer la magie d'une performance live est notre spécialité.</p>
+          <div class="svc-bg">
+            <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=500&q=70" alt="" loading="lazy" aria-hidden="true">
+          </div>
+        </div>
+
+        <div class="svc-card reveal-up" data-delay="320">
+          <div class="svc-num">05</div>
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <h3 class="svc-title">Famille &amp; Lifestyle</h3>
+          <p class="svc-desc">Moments du quotidien, anniversaires, réunions familiales — préservez vos souvenirs les plus chers.</p>
+          <div class="svc-bg">
+            <img src="https://images.unsplash.com/photo-1511895426328-dc8714191011?w=500&q=70" alt="" loading="lazy" aria-hidden="true">
+          </div>
+        </div>
+
+        <div class="svc-card reveal-up" data-delay="400">
+          <div class="svc-num">06</div>
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/>
+            </svg>
+          </div>
+          <h3 class="svc-title">Sports &amp; Action</h3>
+          <p class="svc-desc">Chaque fraction de seconde compte. Nous saisissons l'intensité et la passion du sport en mouvement.</p>
+          <div class="svc-bg">
+            <img src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=500&q=70" alt="" loading="lazy" aria-hidden="true">
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════╗
+       ║          PORTFOLIO SECTION           ║
+       ╚══════════════════════════════════════╝ -->
+  <section id="portfolio" class="portfolio section">
+    <div class="container">
+      <div class="section-header reveal-up">
+        <div class="section-eyebrow">Nos Réalisations</div>
+        <h2 class="section-title">Portfolio <em>Artistique</em></h2>
+      </div>
+
+      <div class="portfolio-filters reveal-up" data-delay="100" role="group" aria-label="Filtrer le portfolio">
+        <button class="filter-btn active" data-filter="all">Tous</button>
+        <button class="filter-btn" data-filter="wedding">Mariages</button>
+        <button class="filter-btn" data-filter="portrait">Portraits</button>
+        <button class="filter-btn" data-filter="event">Événements</button>
+        <button class="filter-btn" data-filter="concert">Concerts</button>
+      </div>
+
+      <div class="portfolio-grid" id="portfolio-grid">
+
+        <div class="port-item port-item--wide" data-cat="wedding">
+          <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=900&q=80" alt="Mariage — Célébration Éternelle" loading="lazy">
+          <div class="port-overlay">
+            <div class="port-meta"><span class="port-cat">Mariage</span><h3>Célébration Éternelle</h3></div>
+            <button class="port-zoom" aria-label="Agrandir Célébration Éternelle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="port-item" data-cat="portrait">
+          <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80" alt="Portrait — Lumière Naturelle" loading="lazy">
+          <div class="port-overlay">
+            <div class="port-meta"><span class="port-cat">Portrait</span><h3>Lumière Naturelle</h3></div>
+            <button class="port-zoom" aria-label="Agrandir Lumière Naturelle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="port-item" data-cat="concert">
+          <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&q=80" alt="Concert — Scène Électrique" loading="lazy">
+          <div class="port-overlay">
+            <div class="port-meta"><span class="port-cat">Concert</span><h3>Scène Électrique</h3></div>
+            <button class="port-zoom" aria-label="Agrandir Scène Électrique">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="port-item" data-cat="event">
+          <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80" alt="Événement — Soirée Corporate" loading="lazy">
+          <div class="port-overlay">
+            <div class="port-meta"><span class="port-cat">Événement</span><h3>Soirée Corporate</h3></div>
+            <button class="port-zoom" aria-label="Agrandir Soirée Corporate">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="port-item port-item--tall" data-cat="portrait">
+          <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80" alt="Portrait — Portrait Masculin" loading="lazy">
+          <div class="port-overlay">
+            <div class="port-meta"><span class="port-cat">Portrait</span><h3>Portrait Masculin</h3></div>
+            <button class="port-zoom" aria-label="Agrandir Portrait Masculin">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="port-item port-item--wide" data-cat="concert">
+          <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=900&q=80" alt="Concert — Festival de Nuit" loading="lazy">
+          <div class="port-overlay">
+            <div class="port-meta"><span class="port-cat">Concert</span><h3>Festival de Nuit</h3></div>
+            <button class="port-zoom" aria-label="Agrandir Festival de Nuit">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="port-item" data-cat="wedding">
+          <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80" alt="Mariage — Cérémonie Intime" loading="lazy">
+          <div class="port-overlay">
+            <div class="port-meta"><span class="port-cat">Mariage</span><h3>Cérémonie Intime</h3></div>
+            <button class="port-zoom" aria-label="Agrandir Cérémonie Intime">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="port-item" data-cat="event">
+          <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&q=80" alt="Événement — Gala de Luxe" loading="lazy">
+          <div class="port-overlay">
+            <div class="port-meta"><span class="port-cat">Événement</span><h3>Gala de Luxe</h3></div>
+            <button class="port-zoom" aria-label="Agrandir Gala de Luxe">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="port-item" data-cat="portrait">
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&q=80" alt="Portrait — Beauté Naturelle" loading="lazy">
+          <div class="port-overlay">
+            <div class="port-meta"><span class="port-cat">Portrait</span><h3>Beauté Naturelle</h3></div>
+            <button class="port-zoom" aria-label="Agrandir Beauté Naturelle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════╗
+       ║             STATS SECTION            ║
+       ╚══════════════════════════════════════╝ -->
+  <section class="stats-section" aria-label="Nos chiffres">
+    <div class="stats-bg" aria-hidden="true">
+      <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1920&q=40" alt="" loading="lazy">
+    </div>
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item reveal-up">
+          <div class="stat-wrap">
+            <span class="stat-num" data-target="500">0</span><span class="stat-suf">+</span>
+          </div>
+          <div class="stat-lbl">Événements Couverts</div>
+        </div>
+        <div class="stat-item reveal-up" data-delay="100">
+          <div class="stat-wrap">
+            <span class="stat-num" data-target="1200">0</span><span class="stat-suf">+</span>
+          </div>
+          <div class="stat-lbl">Clients Satisfaits</div>
+        </div>
+        <div class="stat-item reveal-up" data-delay="200">
+          <div class="stat-wrap">
+            <span class="stat-num" data-target="8">0</span><span class="stat-suf"> ans</span>
+          </div>
+          <div class="stat-lbl">D'Expérience</div>
+        </div>
+        <div class="stat-item reveal-up" data-delay="300">
+          <div class="stat-wrap">
+            <span class="stat-num" data-target="25">0</span><span class="stat-suf">k+</span>
+          </div>
+          <div class="stat-lbl">Photos Livrées</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════╗
+       ║         TESTIMONIALS SECTION         ║
+       ╚══════════════════════════════════════╝ -->
+  <section id="testimonials" class="testimonials section">
+    <div class="container">
+      <div class="section-header reveal-up">
+        <div class="section-eyebrow">Témoignages</div>
+        <h2 class="section-title">Ce Que Disent <em>Nos Clients</em></h2>
+      </div>
+
+      <div class="testi-slider">
+        <div class="testi-track" id="testi-track" role="list">
+
+          <div class="testi-card" role="listitem">
+            <div class="testi-stars" aria-label="5 étoiles">★★★★★</div>
+            <blockquote class="testi-quote">
+              "IMAGE-E-NATION a capturé notre mariage de façon magistrale. Chaque photo raconte une histoire, chaque image déborde d'émotion. Nous ne pouvions rêver mieux."
+            </blockquote>
+            <div class="testi-author">
+              <div class="testi-avatar" aria-hidden="true">S.M</div>
+              <div>
+                <div class="testi-name">Sophie &amp; Marc</div>
+                <div class="testi-role">Mariage — Juin 2024</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testi-card" role="listitem">
+            <div class="testi-stars" aria-label="5 étoiles">★★★★★</div>
+            <blockquote class="testi-quote">
+              "Professionnel, créatif et à l'écoute. Les photos de notre événement corporate ont impressionné tous nos partenaires. Un talent exceptionnel."
+            </blockquote>
+            <div class="testi-author">
+              <div class="testi-avatar" aria-hidden="true">A.D</div>
+              <div>
+                <div class="testi-name">Alexandre Dupont</div>
+                <div class="testi-role">Directeur Marketing</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testi-card" role="listitem">
+            <div class="testi-stars" aria-label="5 étoiles">★★★★★</div>
+            <blockquote class="testi-quote">
+              "Pour notre festival de musique, 6i9 a su saisir chaque moment magique. Les photos reflètent parfaitement l'atmosphère unique de notre événement."
+            </blockquote>
+            <div class="testi-author">
+              <div class="testi-avatar" aria-hidden="true">L.B</div>
+              <div>
+                <div class="testi-name">Laura Bernard</div>
+                <div class="testi-role">Organisatrice d'Événements</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testi-card" role="listitem">
+            <div class="testi-stars" aria-label="5 étoiles">★★★★★</div>
+            <blockquote class="testi-quote">
+              "Mon portrait de marque a transformé ma présence en ligne. Un œil artistique unique qui sait mettre en valeur les personnes qu'il photographie."
+            </blockquote>
+            <div class="testi-author">
+              <div class="testi-avatar" aria-hidden="true">K.M</div>
+              <div>
+                <div class="testi-name">Karim Mansour</div>
+                <div class="testi-role">Entrepreneur</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="testi-nav">
+          <button class="testi-btn" id="testi-prev" aria-label="Témoignage précédent">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+          </button>
+          <div class="testi-dots" id="testi-dots" role="tablist" aria-label="Témoignages"></div>
+          <button class="testi-btn" id="testi-next" aria-label="Témoignage suivant">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════╗
+       ║           CONTACT SECTION            ║
+       ╚══════════════════════════════════════╝ -->
+  <section id="contact" class="contact section">
+    <div class="container">
+      <div class="contact-grid">
+
+        <div class="contact-info reveal-left">
+          <div class="section-eyebrow">Contactez-Nous</div>
+          <h2 class="section-title">Réservez Votre <em>Séance</em></h2>
+          <p class="contact-intro">Prêt à immortaliser vos moments? Discutons de votre projet et créons ensemble des images qui vous ressemblent.</p>
+
+          <div class="contact-details">
+            <div class="contact-row">
+              <div class="contact-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+              </div>
+              <div>
+                <div class="contact-lbl">Téléphone</div>
+                <a href="tel:+15146190000" class="contact-val">+1 (514) 619-0000</a>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="contact-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </div>
+              <div>
+                <div class="contact-lbl">Email</div>
+                <a href="mailto:contact@imagenation6i9.com" class="contact-val">contact@imagenation6i9.com</a>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="contact-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                </svg>
+              </div>
+              <div>
+                <div class="contact-lbl">Localisation</div>
+                <div class="contact-val">Montréal, Québec, Canada</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-socials">
+            <a href="#" class="social-btn" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              </svg>
+            </a>
+            <a href="#" class="social-btn" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+              </svg>
+            </a>
+            <a href="#" class="social-btn" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="contact-form-wrap reveal-right">
+          <form class="contact-form" id="contact-form" novalidate>
+            <div class="form-group">
+              <label for="f-name">Votre Nom</label>
+              <input type="text" id="f-name" name="name" placeholder="Jean Dupont" required autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="f-email">Adresse Email</label>
+              <input type="email" id="f-email" name="email" placeholder="jean@exemple.com" required autocomplete="email">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="f-phone">Téléphone</label>
+                <input type="tel" id="f-phone" name="phone" placeholder="+1 (514) 000-0000" autocomplete="tel">
+              </div>
+              <div class="form-group">
+                <label for="f-type">Type d'Événement</label>
+                <select id="f-type" name="event_type">
+                  <option value="">Sélectionner…</option>
+                  <option value="wedding">Mariage</option>
+                  <option value="portrait">Portrait</option>
+                  <option value="corporate">Corporate</option>
+                  <option value="concert">Concert</option>
+                  <option value="family">Famille</option>
+                  <option value="sport">Sport</option>
+                  <option value="other">Autre</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="f-msg">Votre Message</label>
+              <textarea id="f-msg" name="message" rows="4" placeholder="Décrivez votre projet…" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">
+              <span class="btn-text">Envoyer le Message</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon" aria-hidden="true">
+                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════╗
+       ║              FOOTER                  ║
+       ╚══════════════════════════════════════╝ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">IMAGE-E-NATION</div>
+          <div class="footer-logo-sub">By 6i9</div>
+          <p class="footer-tagline">Capturer l'éternité,<br>un instant à la fois.</p>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">Navigation</h4>
+          <ul>
+            <li><a href="#about">À Propos</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">Services</h4>
+          <ul>
+            <li><a href="#services">Mariages</a></li>
+            <li><a href="#services">Portraits</a></li>
+            <li><a href="#services">Corporate</a></li>
+            <li><a href="#services">Concerts</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">Contact</h4>
+          <p>contact@imagenation6i9.com</p>
+          <p>+1 (514) 619-0000</p>
+          <p>Montréal, QC, Canada</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2024 IMAGE-E-NATION By 6i9. Tous droits réservés.</p>
+        <div class="footer-legal">
+          <a href="#">Confidentialité</a>
+          <a href="#">Conditions</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image agrandie">
+    <div class="lightbox-overlay" id="lb-overlay"></div>
+    <div class="lightbox-inner">
+      <button class="lb-close" id="lb-close" aria-label="Fermer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+      <img src="" alt="" id="lb-img" class="lb-img">
+      <div class="lb-caption">
+        <span id="lb-cat"></span>
+        <strong id="lb-title"></strong>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
