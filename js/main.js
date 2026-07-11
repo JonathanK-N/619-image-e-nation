@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCounters();
   initTestimonials();
   initContactForm();
+  initDynamicContent();
 });
 
 /* ─── Loader ─────────────────────────────────────────────────── */
@@ -331,23 +332,34 @@ function initContactForm() {
   const form = document.getElementById('contact-form');
   if (!form) return;
 
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async e => {
     e.preventDefault();
 
-    const btn      = form.querySelector('button[type="submit"]');
-    const textEl   = btn?.querySelector('.btn-text');
+    const btn    = form.querySelector('button[type="submit"]');
+    const textEl = btn?.querySelector('.btn-text');
     if (!btn || !textEl) return;
 
     const orig = textEl.textContent;
     btn.disabled = true;
     textEl.textContent = 'Envoi en cours…';
 
-    // Simulate async send
-    setTimeout(() => {
+    const data = {
+      name: form.querySelector('[name="name"]').value,
+      email: form.querySelector('[name="email"]').value,
+      phone: form.querySelector('[name="phone"]').value,
+      event_type: form.querySelector('[name="event_type"]').value,
+      message: form.querySelector('[name="message"]').value
+    };
+
+    try {
+      await fetch('/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
       textEl.textContent = '✓ Message Envoyé';
       btn.style.background = 'var(--c-black-card)';
       btn.style.borderColor = 'var(--c-silver-low)';
-
       setTimeout(() => {
         btn.disabled = false;
         textEl.textContent = orig;
@@ -355,17 +367,61 @@ function initContactForm() {
         btn.style.borderColor = '';
         form.reset();
       }, 3200);
-    }, 1500);
+    } catch {
+      textEl.textContent = '✗ Erreur';
+      setTimeout(() => { btn.disabled = false; textEl.textContent = orig; }, 2000);
+    }
   });
 
-  // Inline validation on blur
   form.querySelectorAll('[required]').forEach(field => {
     field.addEventListener('blur', () => {
-      const empty = !field.value.trim();
-      field.style.borderColor = empty ? '#c0392b' : '';
+      field.style.borderColor = !field.value.trim() ? '#c0392b' : '';
     });
-    field.addEventListener('input', () => {
-      field.style.borderColor = '';
-    });
+    field.addEventListener('input', () => { field.style.borderColor = ''; });
   });
+}
+
+/* ─── Load Dynamic Content ───────────────────────────────────── */
+function initDynamicContent() {
+  fetch('/api/content').then(r => r.json()).then(c => {
+    // Hero
+    const heroImg = document.querySelector('.hero-bg img');
+    if (heroImg && c.hero?.image) heroImg.src = c.hero.image;
+    const heroEyebrow = document.querySelector('.hero-eyebrow');
+    if (heroEyebrow && c.hero?.eyebrow) heroEyebrow.textContent = c.hero.eyebrow;
+    const heroDesc = document.querySelector('.hero-desc');
+    if (heroDesc && c.hero?.description) heroDesc.innerHTML = c.hero.description;
+
+    // About
+    const aboutMain = document.querySelector('.about-img-main img');
+    if (aboutMain && c.about?.imageMain) aboutMain.src = c.about.imageMain;
+    const aboutSecond = document.querySelector('.about-img-second img');
+    if (aboutSecond && c.about?.imageSecond) aboutSecond.src = c.about.imageSecond;
+    const kpiNum = document.querySelector('.kpi-num');
+    if (kpiNum && c.about?.kpiNum) kpiNum.textContent = c.about.kpiNum;
+    const kpiLabel = document.querySelector('.kpi-label');
+    if (kpiLabel && c.about?.kpiLabel) kpiLabel.textContent = c.about.kpiLabel;
+  }).catch(() => {});
+
+  // Load approved reviews
+  fetch('/api/reviews').then(r => r.json()).then(reviews => {
+    if (!reviews.length) return;
+    const track = document.getElementById('testi-track');
+    if (!track) return;
+    track.innerHTML = reviews.map(r => `
+      <div class="testi-card" role="listitem">
+        <div class="testi-stars" aria-label="${r.rating} étoiles">${'★'.repeat(r.rating || 5)}${'☆'.repeat(5 - (r.rating || 5))}</div>
+        <blockquote class="testi-quote">"${r.message}"</blockquote>
+        <div class="testi-author">
+          <div class="testi-avatar" aria-hidden="true">${r.name.split(' ').map(w => w[0]).join('.').toUpperCase()}</div>
+          <div>
+            <div class="testi-name">${r.name}</div>
+            <div class="testi-role">${r.role || 'Client'}</div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    // Re-init testimonials slider
+    initTestimonials();
+  }).catch(() => {});
 }

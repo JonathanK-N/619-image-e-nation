@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — IMAGE-E-NATION</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #0a0a0a; color: #e0e0e0; min-height: 100vh; }
+    
+    /* Login */
+    .login-wrap { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    .login-box { background: #111; border: 1px solid #222; padding: 48px 36px; width: 100%; max-width: 380px; text-align: center; }
+    .login-box h1 { font-size: 1.2rem; letter-spacing: 0.2em; margin-bottom: 8px; }
+    .login-box p { font-size: 0.8rem; color: #666; margin-bottom: 24px; }
+    .login-box input { width: 100%; padding: 12px 16px; background: #0a0a0a; border: 1px solid #333; color: #fff; font-size: 0.9rem; margin-bottom: 16px; }
+    .login-box button { width: 100%; padding: 12px; background: #fff; color: #000; font-weight: 600; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; border: none; cursor: pointer; }
+    .login-box button:hover { background: #ddd; }
+    .login-error { color: #e74c3c; font-size: 0.8rem; margin-bottom: 12px; display: none; }
+
+    /* Dashboard */
+    .dashboard { display: none; }
+    .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 220px; background: #111; border-right: 1px solid #1c1c1c; padding: 24px 0; overflow-y: auto; }
+    .sidebar-brand { padding: 0 20px 24px; border-bottom: 1px solid #1c1c1c; margin-bottom: 16px; }
+    .sidebar-brand h2 { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; }
+    .sidebar-brand span { font-size: 0.65rem; color: #666; }
+    .nav-item { display: block; padding: 10px 20px; font-size: 0.8rem; color: #888; cursor: pointer; transition: all 0.2s; border: none; background: none; width: 100%; text-align: left; font-family: inherit; }
+    .nav-item:hover, .nav-item.active { color: #fff; background: #1a1a1a; }
+    .nav-item.active { border-left: 2px solid #fff; }
+
+    .main { margin-left: 220px; padding: 32px; }
+    .main h2 { font-size: 1.1rem; letter-spacing: 0.1em; margin-bottom: 24px; }
+
+    /* Forms */
+    .form-section { margin-bottom: 32px; padding: 24px; background: #111; border: 1px solid #1c1c1c; }
+    .form-section h3 { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: #888; margin-bottom: 16px; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: #666; margin-bottom: 4px; }
+    .field input, .field textarea, .field select { width: 100%; padding: 10px 12px; background: #0a0a0a; border: 1px solid #222; color: #fff; font-size: 0.85rem; font-family: inherit; }
+    .field textarea { min-height: 80px; resize: vertical; }
+    .btn { padding: 10px 24px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; border: none; cursor: pointer; transition: all 0.2s; }
+    .btn-save { background: #fff; color: #000; }
+    .btn-save:hover { background: #ccc; }
+    .btn-danger { background: #c0392b; color: #fff; }
+    .btn-sm { padding: 6px 14px; font-size: 0.65rem; }
+    .btn-outline { background: none; border: 1px solid #444; color: #ccc; }
+    .btn-outline:hover { border-color: #fff; color: #fff; }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    th { text-align: left; padding: 10px 12px; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: #666; border-bottom: 1px solid #222; }
+    td { padding: 10px 12px; border-bottom: 1px solid #1a1a1a; }
+    .badge { display: inline-block; padding: 3px 10px; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .badge-pending { background: #2c3e50; color: #f39c12; }
+    .badge-confirmed { background: #1a3a2a; color: #2ecc71; }
+    .badge-cancelled { background: #3a1a1a; color: #e74c3c; }
+    .badge-approved { background: #1a3a2a; color: #2ecc71; }
+
+    .toast { position: fixed; bottom: 24px; right: 24px; background: #1a1a1a; border: 1px solid #333; padding: 12px 20px; font-size: 0.8rem; opacity: 0; transition: opacity 0.3s; z-index: 999; }
+    .toast.show { opacity: 1; }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Services list */
+    .svc-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px; background: #0a0a0a; border: 1px solid #1c1c1c; margin-bottom: 8px; }
+    .svc-item img { width: 60px; height: 60px; object-fit: cover; }
+    .svc-item-info { flex: 1; }
+    .svc-item-info h4 { font-size: 0.85rem; margin-bottom: 4px; }
+    .svc-item-info p { font-size: 0.75rem; color: #888; }
+
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; position: static; border-right: none; border-bottom: 1px solid #1c1c1c; padding: 12px 0; display: flex; overflow-x: auto; }
+      .sidebar-brand { display: none; }
+      .nav-item { white-space: nowrap; padding: 8px 16px; }
+      .nav-item.active { border-left: none; border-bottom: 2px solid #fff; }
+      .main { margin-left: 0; padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login-section">
+  <div class="login-box">
+    <h1>ADMIN</h1>
+    <p>IMAGE-E-NATION By 6i9</p>
+    <div class="login-error" id="login-error">Mot de passe incorrect</div>
+    <input type="password" id="login-pass" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doLogin()">
+    <button onclick="doLogin()">Connexion</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <h2>Admin Panel</h2>
+      <span>IMAGE-E-NATION</span>
+    </div>
+    <button class="nav-item active" data-tab="tab-hero">Hero</button>
+    <button class="nav-item" data-tab="tab-about">À Propos</button>
+    <button class="nav-item" data-tab="tab-services">Services</button>
+    <button class="nav-item" data-tab="tab-stats">Statistiques</button>
+    <button class="nav-item" data-tab="tab-contact">Contact</button>
+    <button class="nav-item" data-tab="tab-bookings">Rendez-vous</button>
+    <button class="nav-item" data-tab="tab-reviews">Avis</button>
+    <button class="nav-item" onclick="logout()" style="color:#e74c3c;margin-top:auto;">Déconnexion</button>
+  </aside>
+
+  <main class="main">
+    <!-- HERO -->
+    <div class="tab-content active" id="tab-hero">
+      <h2>Section Hero</h2>
+      <div class="form-section">
+        <div class="field"><label>Eyebrow</label><input id="hero-eyebrow"></div>
+        <div class="field"><label>Titre</label><input id="hero-title"></div>
+        <div class="field"><label>Sous-titre</label><input id="hero-subtitle"></div>
+        <div class="field"><label>Description (HTML autorisé)</label><textarea id="hero-description"></textarea></div>
+        <div class="field"><label>URL Image de fond</label><input id="hero-image"></div>
+        <button class="btn btn-save" onclick="saveContent()">Sauvegarder</button>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="tab-content" id="tab-about">
+      <h2>Section À Propos</h2>
+      <div class="form-section">
+        <div class="field"><label>Eyebrow</label><input id="about-eyebrow"></div>
+        <div class="field"><label>Titre (HTML)</label><input id="about-title"></div>
+        <div class="field"><label>Paragraphe 1</label><textarea id="about-body1"></textarea></div>
+        <div class="field"><label>Paragraphe 2</label><textarea id="about-body2"></textarea></div>
+        <div class="field"><label>Signature</label><input id="about-signature"></div>
+        <div class="field"><label>Image principale URL</label><input id="about-imageMain"></div>
+        <div class="field"><label>Image secondaire URL</label><input id="about-imageSecond"></div>
+        <div class="field"><label>KPI Nombre</label><input id="about-kpiNum"></div>
+        <div class="field"><label>KPI Label</label><input id="about-kpiLabel"></div>
+        <button class="btn btn-save" onclick="saveContent()">Sauvegarder</button>
+      </div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="tab-content" id="tab-services">
+      <h2>Services</h2>
+      <div class="form-section" id="services-list"></div>
+      <div class="form-section">
+        <h3>Ajouter / Modifier un service</h3>
+        <div class="field"><label>Numéro</label><input id="svc-num" placeholder="07"></div>
+        <div class="field"><label>Titre</label><input id="svc-title"></div>
+        <div class="field"><label>Description</label><textarea id="svc-desc"></textarea></div>
+        <div class="field"><label>Image URL</label><input id="svc-image"></div>
+        <input type="hidden" id="svc-edit-idx" value="-1">
+        <button class="btn btn-save" onclick="saveService()">Ajouter / Modifier</button>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="tab-content" id="tab-stats">
+      <h2>Statistiques</h2>
+      <div class="form-section" id="stats-form"></div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="tab-content" id="tab-contact">
+      <h2>Informations de Contact</h2>
+      <div class="form-section">
+        <div class="field"><label>Téléphone</label><input id="contact-phone"></div>
+        <div class="field"><label>Email</label><input id="contact-email"></div>
+        <div class="field"><label>Localisation</label><input id="contact-location"></div>
+        <button class="btn btn-save" onclick="saveContent()">Sauvegarder</button>
+      </div>
+    </div>
+
+    <!-- BOOKINGS -->
+    <div class="tab-content" id="tab-bookings">
+      <h2>Rendez-vous</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Nom</th><th>Email</th><th>Type</th><th>Statut</th><th>Actions</th></tr></thead>
+          <tbody id="bookings-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="tab-content" id="tab-reviews">
+      <h2>Avis Clients</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Nom</th><th>Note</th><th>Message</th><th>Statut</th><th>Actions</th></tr></thead>
+          <tbody id="reviews-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let token = localStorage.getItem('admin_token');
+let content = {};
+
+// ─── Auth ───
+async function doLogin() {
+  const pass = document.getElementById('login-pass').value;
+  const res = await fetch('/api/admin/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: pass })
+  });
+  if (res.ok) {
+    const data = await res.json();
+    token = data.token;
+    localStorage.setItem('admin_token', token);
+    showDashboard();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+function logout() {
+  localStorage.removeItem('admin_token');
+  location.reload();
+}
+
+function showDashboard() {
+  document.getElementById('login-section').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'flex';
+  loadContent();
+  loadBookings();
+  loadReviews();
+}
+
+// ─── Tabs ───
+document.querySelectorAll('.nav-item[data-tab]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ─── Content ───
+async function loadContent() {
+  const res = await fetch('/api/content');
+  content = await res.json();
+  populateFields();
+}
+
+function populateFields() {
+  // Hero
+  document.getElementById('hero-eyebrow').value = content.hero?.eyebrow || '';
+  document.getElementById('hero-title').value = content.hero?.title || '';
+  document.getElementById('hero-subtitle').value = content.hero?.subtitle || '';
+  document.getElementById('hero-description').value = content.hero?.description || '';
+  document.getElementById('hero-image').value = content.hero?.image || '';
+  // About
+  document.getElementById('about-eyebrow').value = content.about?.eyebrow || '';
+  document.getElementById('about-title').value = content.about?.title || '';
+  document.getElementById('about-body1').value = content.about?.body1 || '';
+  document.getElementById('about-body2').value = content.about?.body2 || '';
+  document.getElementById('about-signature').value = content.about?.signature || '';
+  document.getElementById('about-imageMain').value = content.about?.imageMain || '';
+  document.getElementById('about-imageSecond').value = content.about?.imageSecond || '';
+  document.getElementById('about-kpiNum').value = content.about?.kpiNum || '';
+  document.getElementById('about-kpiLabel').value = content.about?.kpiLabel || '';
+  // Contact
+  document.getElementById('contact-phone').value = content.contact?.phone || '';
+  document.getElementById('contact-email').value = content.contact?.email || '';
+  document.getElementById('contact-location').value = content.contact?.location || '';
+  // Services
+  renderServices();
+  // Stats
+  renderStats();
+}
+
+function gatherContent() {
+  content.hero = {
+    eyebrow: document.getElementById('hero-eyebrow').value,
+    title: document.getElementById('hero-title').value,
+    subtitle: document.getElementById('hero-subtitle').value,
+    description: document.getElementById('hero-description').value,
+    image: document.getElementById('hero-image').value
+  };
+  content.about = {
+    eyebrow: document.getElementById('about-eyebrow').value,
+    title: document.getElementById('about-title').value,
+    body1: document.getElementById('about-body1').value,
+    body2: document.getElementById('about-body2').value,
+    signature: document.getElementById('about-signature').value,
+    imageMain: document.getElementById('about-imageMain').value,
+    imageSecond: document.getElementById('about-imageSecond').value,
+    kpiNum: document.getElementById('about-kpiNum').value,
+    kpiLabel: document.getElementById('about-kpiLabel').value
+  };
+  content.contact = {
+    phone: document.getElementById('contact-phone').value,
+    email: document.getElementById('contact-email').value,
+    location: document.getElementById('contact-location').value
+  };
+}
+
+async function saveContent() {
+  gatherContent();
+  const res = await fetch('/api/content', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+    body: JSON.stringify(content)
+  });
+  if (res.ok) toast('Contenu sauvegardé ✓');
+  else toast('Erreur de sauvegarde');
+}
+
+// ─── Services ───
+function renderServices() {
+  const list = document.getElementById('services-list');
+  list.innerHTML = '<h3>Services actuels</h3>' + (content.services || []).map((s, i) => `
+    <div class="svc-item">
+      <img src="${s.image}" alt="">
+      <div class="svc-item-info">
+        <h4>${s.num} — ${s.title}</h4>
+        <p>${s.desc}</p>
+      </div>
+      <button class="btn btn-sm btn-outline" onclick="editService(${i})">✏️</button>
+      <button class="btn btn-sm btn-danger" onclick="deleteService(${i})">🗑️</button>
+    </div>
+  `).join('');
+}
+
+function editService(idx) {
+  const s = content.services[idx];
+  document.getElementById('svc-num').value = s.num;
+  document.getElementById('svc-title').value = s.title;
+  document.getElementById('svc-desc').value = s.desc;
+  document.getElementById('svc-image').value = s.image;
+  document.getElementById('svc-edit-idx').value = idx;
+}
+
+function deleteService(idx) {
+  content.services.splice(idx, 1);
+  saveContent().then(renderServices);
+}
+
+function saveService() {
+  const idx = parseInt(document.getElementById('svc-edit-idx').value);
+  const svc = {
+    num: document.getElementById('svc-num').value,
+    title: document.getElementById('svc-title').value,
+    desc: document.getElementById('svc-desc').value,
+    image: document.getElementById('svc-image').value
+  };
+  if (idx >= 0) content.services[idx] = svc;
+  else content.services.push(svc);
+  document.getElementById('svc-edit-idx').value = -1;
+  document.getElementById('svc-num').value = '';
+  document.getElementById('svc-title').value = '';
+  document.getElementById('svc-desc').value = '';
+  document.getElementById('svc-image').value = '';
+  saveContent().then(renderServices);
+}
+
+// ─── Stats ───
+function renderStats() {
+  const form = document.getElementById('stats-form');
+  form.innerHTML = '<h3>Statistiques</h3>' + (content.stats || []).map((s, i) => `
+    <div style="display:flex;gap:8px;margin-bottom:8px;align-items:center;">
+      <input value="${s.num}" onchange="content.stats[${i}].num=this.value" style="width:80px;padding:8px;background:#0a0a0a;border:1px solid #222;color:#fff;">
+      <input value="${s.suffix}" onchange="content.stats[${i}].suffix=this.value" style="width:60px;padding:8px;background:#0a0a0a;border:1px solid #222;color:#fff;">
+      <input value="${s.label}" onchange="content.stats[${i}].label=this.value" style="flex:1;padding:8px;background:#0a0a0a;border:1px solid #222;color:#fff;">
+    </div>
+  `).join('') + '<button class="btn btn-save" onclick="saveContent()" style="margin-top:12px;">Sauvegarder</button>';
+}
+
+// ─── Bookings ───
+async function loadBookings() {
+  const res = await fetch('/api/bookings', { headers: { 'x-admin-token': token } });
+  if (!res.ok) return;
+  const bookings = await res.json();
+  const tbody = document.getElementById('bookings-tbody');
+  tbody.innerHTML = bookings.reverse().map(b => `
+    <tr>
+      <td>${new Date(b.createdAt).toLocaleDateString('fr-CA')}</td>
+      <td>${b.name}</td>
+      <td>${b.email}</td>
+      <td>${b.event_type || '-'}</td>
+      <td><span class="badge badge-${b.status}">${b.status}</span></td>
+      <td>
+        ${b.status === 'confirmed' ? `<button class="btn btn-sm btn-outline" onclick="requestReview('${b.id}')">Demander avis</button>` : ''}
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function requestReview(id) {
+  await fetch(`/api/bookings/${id}/request-review`, {
+    method: 'POST',
+    headers: { 'x-admin-token': token }
+  });
+  toast('Demande d\'avis envoyée ✓');
+}
+
+// ─── Reviews ───
+async function loadReviews() {
+  const res = await fetch('/api/reviews?all=true');
+  const reviews = await res.json();
+  const tbody = document.getElementById('reviews-tbody');
+  tbody.innerHTML = reviews.reverse().map(r => `
+    <tr>
+      <td>${new Date(r.createdAt).toLocaleDateString('fr-CA')}</td>
+      <td>${r.name}</td>
+      <td>${'⭐'.repeat(r.rating || 5)}</td>
+      <td>${r.message?.substring(0, 60)}...</td>
+      <td><span class="badge ${r.approved ? 'badge-approved' : 'badge-pending'}">${r.approved ? 'Approuvé' : 'En attente'}</span></td>
+      <td>
+        ${!r.approved ? `<button class="btn btn-sm btn-save" onclick="reviewAction('${r.id}','approve')">✅</button>` : ''}
+        <button class="btn btn-sm btn-danger" onclick="reviewAction('${r.id}','reject')">🗑️</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function reviewAction(id, action) {
+  await fetch(`/api/reviews/${id}/action`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action })
+  });
+  loadReviews();
+  toast(action === 'approve' ? 'Avis approuvé ✓' : 'Avis supprimé');
+}
+
+// ─── Toast ───
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ─── Init ───
+if (token) {
+  fetch('/api/content', { headers: { 'x-admin-token': token } })
+    .then(r => { if (r.ok) showDashboard(); });
+}
+</script>
+</body>
+</html>

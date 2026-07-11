@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Action Rendez-vous — IMAGE-E-NATION</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #0a0a0a; color: #e0e0e0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .card { background: #111; border: 1px solid #222; padding: 40px 32px; max-width: 420px; width: 100%; text-align: center; }
+    h1 { font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 8px; }
+    .subtitle { font-size: 0.8rem; color: #888; margin-bottom: 24px; }
+    .info { text-align: left; background: #0a0a0a; border: 1px solid #1c1c1c; padding: 16px; margin-bottom: 24px; font-size: 0.82rem; line-height: 1.8; }
+    .info strong { color: #fff; }
+    .question { font-size: 0.85rem; margin-bottom: 16px; color: #ccc; }
+    .methods { display: flex; gap: 12px; justify-content: center; margin-bottom: 20px; }
+    .method-btn { flex: 1; padding: 14px; border: 1px solid #333; background: #1a1a1a; color: #fff; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .method-btn:hover { border-color: #fff; background: #222; }
+    .method-btn.selected { border-color: #fff; background: #fff; color: #000; }
+    .confirm-btn { width: 100%; padding: 14px; background: #2ecc71; color: #000; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; border: none; cursor: pointer; display: none; }
+    .confirm-btn.cancel-action { background: #e74c3c; color: #fff; }
+    .result { display: none; padding: 20px; font-size: 0.9rem; }
+    .result.success { color: #2ecc71; }
+    .result.error { color: #e74c3c; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1 id="page-title">Rendez-vous</h1>
+    <p class="subtitle">IMAGE-E-NATION By 6i9</p>
+    <div class="info" id="booking-info">Chargement...</div>
+    <div id="action-area">
+      <p class="question" id="question-text">Comment souhaitez-vous notifier le client ?</p>
+      <div class="methods">
+        <button class="method-btn" data-method="email" onclick="selectMethod('email')">📧 Email</button>
+        <button class="method-btn" data-method="whatsapp" onclick="selectMethod('whatsapp')">📱 WhatsApp</button>
+      </div>
+      <button class="confirm-btn" id="confirm-btn" onclick="submitAction()">Confirmer</button>
+    </div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const bookingId = params.get('id');
+    const action = params.get('action');
+    let selectedMethod = null;
+
+    // Set page title based on action
+    const title = action === 'confirm' ? '✅ Confirmer le Rendez-vous' : '❌ Annuler le Rendez-vous';
+    document.getElementById('page-title').textContent = title;
+    
+    const questionText = action === 'confirm' 
+      ? 'Comment souhaitez-vous envoyer la confirmation ?' 
+      : 'Comment souhaitez-vous notifier l\'annulation ?';
+    document.getElementById('question-text').textContent = questionText;
+
+    const confirmBtn = document.getElementById('confirm-btn');
+    if (action === 'cancel') confirmBtn.classList.add('cancel-action');
+
+    // Load booking info
+    fetch(`/api/bookings`, { headers: { 'x-admin-token': localStorage.getItem('admin_token') || '' } })
+      .then(r => r.json())
+      .then(bookings => {
+        const b = bookings.find(x => x.id === bookingId);
+        if (b) {
+          document.getElementById('booking-info').innerHTML = 
+            `<strong>Nom:</strong> ${b.name}<br>` +
+            `<strong>Email:</strong> ${b.email}<br>` +
+            `<strong>Tél:</strong> ${b.phone || 'Non fourni'}<br>` +
+            `<strong>Type:</strong> ${b.event_type || 'Non spécifié'}<br>` +
+            `<strong>Message:</strong> ${b.message}`;
+        }
+      }).catch(() => {
+        document.getElementById('booking-info').textContent = 'ID: ' + bookingId;
+      });
+
+    function selectMethod(method) {
+      selectedMethod = method;
+      document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('selected'));
+      document.querySelector(`[data-method="${method}"]`).classList.add('selected');
+      confirmBtn.style.display = 'block';
+      confirmBtn.textContent = action === 'confirm' ? 'Confirmer le rendez-vous' : 'Annuler le rendez-vous';
+    }
+
+    async function submitAction() {
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = 'Traitement...';
+      
+      const res = await fetch(`/api/bookings/${bookingId}/action`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, method: selectedMethod })
+      });
+
+      const result = document.getElementById('result');
+      document.getElementById('action-area').style.display = 'none';
+      result.style.display = 'block';
+
+      if (res.ok) {
+        result.className = 'result success';
+        const verb = action === 'confirm' ? 'confirmé' : 'annulé';
+        const methodText = selectedMethod === 'email' ? 'par email' : 'par WhatsApp';
+        result.textContent = `✓ Rendez-vous ${verb}. Notification ${methodText}.`;
+      } else {
+        result.className = 'result error';
+        result.textContent = '✗ Erreur lors du traitement.';
+      }
+    }
+  </script>
+</body>
+</html>

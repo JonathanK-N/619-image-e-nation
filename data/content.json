@@ -1,0 +1,39 @@
+{
+  "hero": {
+    "eyebrow": "Photographe Professionnel",
+    "title": "IMAGE-E-NATION",
+    "subtitle": "By 6i9",
+    "description": "Chaque instant figé dans le temps.<br>Chaque émotion capturée pour l'éternité.",
+    "image": "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1920&q=85"
+  },
+  "about": {
+    "eyebrow": "Notre Histoire",
+    "title": "L'Art de<br><em>Capturer l'Instant</em>",
+    "body1": "IMAGE-E-NATION By 6i9 est bien plus qu'un service de photographie — c'est une vision artistique dédiée à immortaliser vos moments les plus précieux. Avec une passion pour la lumière, la composition et l'émotion authentique, nous transformons chaque prise de vue en œuvre d'art intemporelle.",
+    "body2": "Que ce soit pour un mariage grandiose, un portrait intime, un événement corporate ou un concert électrisant, notre expertise technique et notre sensibilité artistique garantissent des résultats qui vous laisseront sans voix.",
+    "signature": "— 6i9, Fondateur & Photographe Principal",
+    "imageMain": "https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=700&q=80",
+    "imageSecond": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=450&q=80",
+    "kpiNum": "+25",
+    "kpiLabel": "Événements"
+  },
+  "services": [
+    {"num": "01", "title": "Mariages", "desc": "Immortalisez le plus beau jour de votre vie avec des photos qui racontent votre histoire d'amour unique.", "image": "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=500&q=70"},
+    {"num": "02", "title": "Portraits", "desc": "Des portraits authentiques qui capturent votre personnalité et révèlent votre lumière intérieure.", "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&q=70"},
+    {"num": "03", "title": "Corporate", "desc": "Conférences, lancements, galas — nous sublimez votre image professionnelle et institutionnelle.", "image": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&q=70"},
+    {"num": "04", "title": "Concerts & Spectacles", "desc": "L'énergie, la lumière, le mouvement — capturer la magie d'une performance live est notre spécialité.", "image": "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=500&q=70"},
+    {"num": "05", "title": "Famille & Lifestyle", "desc": "Moments du quotidien, anniversaires, réunions familiales — préservez vos souvenirs les plus chers.", "image": "https://images.unsplash.com/photo-1511895426328-dc8714191011?w=500&q=70"},
+    {"num": "06", "title": "Sports & Action", "desc": "Chaque fraction de seconde compte. Nous saisissons l'intensité et la passion du sport en mouvement.", "image": "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=500&q=70"}
+  ],
+  "stats": [
+    {"num": "25", "suffix": "+", "label": "Événements Couverts"},
+    {"num": "20", "suffix": "+", "label": "Clients Satisfaits"},
+    {"num": "2", "suffix": " ans", "label": "D'Expérience"},
+    {"num": "1000", "suffix": "+", "label": "Photos Livrées"}
+  ],
+  "contact": {
+    "phone": "+1 (514) 619-0000",
+    "email": "contact@imagenation6i9.com",
+    "location": "Montréal, Québec, Canada"
+  }
+}
