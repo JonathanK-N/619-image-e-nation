@@ -386,6 +386,23 @@
         </div>
       </section>
 
+      <!-- PRICING -->
+      <section class="tab" id="tab-pricing">
+        <div class="card">
+          <div class="card-head"><h3>En-tête de la section</h3></div>
+          <div class="grid-2">
+            <div class="field"><label>Eyebrow</label><input id="pricing-eyebrow"></div>
+            <div class="field"><label>Titre (HTML autorisé)</label><input id="pricing-title"></div>
+            <div class="field col-span"><label>Note (bas de section)</label><input id="pricing-note"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Catégories & tarifs</h3><button class="btn btn-outline btn-sm" onclick="addPriceCat()">+ Catégorie</button></div>
+          <div id="pricing-cats"></div>
+        </div>
+        <div class="save-bar"><button class="btn btn-primary" onclick="savePricing()">Sauvegarder</button></div>
+      </section>
+
       <!-- STATS -->
       <section class="tab" id="tab-stats">
         <div class="card">
@@ -472,6 +489,7 @@ const ICON = {
   about: '<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 12 0v1"/>',
   services: '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>',
   portfolio: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>',
+  pricing: '<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
   stats: '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
   contact: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.13.99.36 1.95.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.86.34 1.82.57 2.81.7A2 2 0 0 1 22 16.92z"/>',
   media: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>',
@@ -485,6 +503,7 @@ const NAV = [
   { id: 'about',     label: 'À Propos' },
   { id: 'services',  label: 'Services' },
   { id: 'portfolio', label: 'Galerie' },
+  { id: 'pricing',   label: 'Tarifs' },
   { id: 'stats',     label: 'Statistiques' },
   { id: 'contact',   label: 'Contact' },
   { id: 'media',     label: 'Médiathèque' },
@@ -615,7 +634,9 @@ function populateFields() {
   setVal('about-imageSecond', a.imageSecond); setThumb('about-imageSecond', a.imageSecond);
   setVal('about-kpiNum', a.kpiNum); setVal('about-kpiLabel', a.kpiLabel);
   setVal('contact-phone', c.phone); setVal('contact-email', c.email); setVal('contact-location', c.location);
-  renderServices(); renderPortfolio(); renderStats();
+  const p = content.pricing || {};
+  setVal('pricing-eyebrow', p.eyebrow); setVal('pricing-title', p.title); setVal('pricing-note', p.note);
+  renderServices(); renderPortfolio(); renderPricing(); renderStats();
 }
 function gatherContent() {
   content.hero = {
@@ -728,6 +749,45 @@ function deletePortfolio(i) {
   if (!confirm('Supprimer cette photo de la galerie ?')) return;
   content.portfolio.splice(i, 1);
   saveContent().then(renderPortfolio);
+}
+
+/* ══════════════ PRICING ══════════════ */
+function ensurePricing() {
+  content.pricing = content.pricing || {};
+  content.pricing.categories = content.pricing.categories || [];
+  return content.pricing;
+}
+function renderPricing() {
+  const p = ensurePricing();
+  document.getElementById('pricing-cats').innerHTML = p.categories.map((cat, ci) => `
+    <div class="card" style="background:var(--bg-soft);padding:18px;margin-bottom:14px">
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px">
+        <input value="${esc(cat.title || '')}" oninput="content.pricing.categories[${ci}].title=this.value"
+               placeholder="Nom de la catégorie" style="flex:1;padding:10px 12px;background:var(--bg);border:1px solid var(--line-hi);border-radius:8px;color:#fff;font-weight:600">
+        <label style="display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--txt-dim);white-space:nowrap;text-transform:uppercase;letter-spacing:.08em">
+          <input type="checkbox" ${cat.feature ? 'checked' : ''} onchange="content.pricing.categories[${ci}].feature=this.checked" style="width:auto"> Mise en avant
+        </label>
+        <button class="btn btn-danger btn-sm" onclick="removePriceCat(${ci})">Suppr.</button>
+      </div>
+      ${(cat.items || []).map((it, ii) => `
+        <div style="display:grid;grid-template-columns:1fr 130px auto;gap:8px;margin-bottom:8px">
+          <input value="${esc(it.label || '')}" oninput="content.pricing.categories[${ci}].items[${ii}].label=this.value"
+                 placeholder="Ex: 1 h" style="padding:9px 11px;background:var(--bg);border:1px solid var(--line-hi);border-radius:8px;color:#fff">
+          <input value="${esc(it.price || '')}" oninput="content.pricing.categories[${ci}].items[${ii}].price=this.value"
+                 placeholder="Ex: 185 $" style="padding:9px 11px;background:var(--bg);border:1px solid var(--line-hi);border-radius:8px;color:var(--accent);font-family:var(--f-serif);font-size:1rem">
+          <button class="btn btn-outline btn-sm" onclick="removePriceItem(${ci},${ii})">✕</button>
+        </div>`).join('')}
+      <button class="btn btn-outline btn-sm" onclick="addPriceItem(${ci})" style="margin-top:4px">+ Ligne</button>
+    </div>`).join('') || `<p class="hint">Aucune catégorie. Cliquez sur « + Catégorie ».</p>`;
+}
+function addPriceCat() { ensurePricing().categories.push({ title: 'Nouvelle catégorie', items: [{ label: '', price: '' }] }); renderPricing(); }
+function removePriceCat(ci) { if (!confirm('Supprimer cette catégorie ?')) return; content.pricing.categories.splice(ci, 1); renderPricing(); }
+function addPriceItem(ci) { const cat = content.pricing.categories[ci]; cat.items = cat.items || []; cat.items.push({ label: '', price: '' }); renderPricing(); }
+function removePriceItem(ci, ii) { content.pricing.categories[ci].items.splice(ii, 1); renderPricing(); }
+function savePricing() {
+  const p = ensurePricing();
+  p.eyebrow = val('pricing-eyebrow'); p.title = val('pricing-title'); p.note = val('pricing-note');
+  saveContent();
 }
 
 /* ══════════════ STATS ══════════════ */

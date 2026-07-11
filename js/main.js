@@ -442,6 +442,27 @@ function initDynamicContent() {
       initCounters();
     }
 
+    // Pricing
+    if (c.pricing) {
+      const pEye = document.getElementById('pricing-eyebrow');
+      if (pEye && c.pricing.eyebrow) pEye.textContent = c.pricing.eyebrow;
+      const pTitle = document.getElementById('pricing-title');
+      if (pTitle && c.pricing.title) pTitle.innerHTML = c.pricing.title;
+      const pNote = document.getElementById('pricing-note');
+      if (pNote) pNote.textContent = c.pricing.note || '';
+      const pGrid = document.getElementById('pricing-grid');
+      if (pGrid && Array.isArray(c.pricing.categories) && c.pricing.categories.length) {
+        pGrid.innerHTML = c.pricing.categories.map((cat, i) => `
+          <div class="price-card${cat.feature ? ' price-card--feature' : ''} reveal-up" data-delay="${i * 80}">
+            <h3 class="price-cat">${esc(cat.title)}</h3>
+            <ul class="price-list">
+              ${(cat.items || []).map(it => `
+                <li><span class="price-label">${esc(it.label)}</span><span class="price-value">${esc(it.price)}</span></li>`).join('')}
+            </ul>
+          </div>`).join('');
+      }
+    }
+
     // Portfolio
     const portGrid = document.getElementById('portfolio-grid');
     if (portGrid && Array.isArray(c.portfolio) && c.portfolio.length) {

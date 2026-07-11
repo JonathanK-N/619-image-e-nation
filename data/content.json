@@ -36,6 +36,19 @@
     {"cat": "event", "catLabel": "Événement", "title": "Gala de Luxe", "size": "", "image": "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&q=80"},
     {"cat": "portrait", "catLabel": "Portrait", "title": "Beauté Naturelle", "size": "", "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&q=80"}
   ],
+  "pricing": {
+    "eyebrow": "Nos Tarifs",
+    "title": "Tarifs & <em>Forfaits</em>",
+    "note": "Dépôt de 30 % requis pour confirmer la réservation.",
+    "categories": [
+      {"title": "Portrait individuel", "items": [{"label": "30 min", "price": "125 $"}, {"label": "1 h", "price": "185 $"}]},
+      {"title": "Couple", "items": [{"label": "1 h", "price": "220 $"}]},
+      {"title": "Famille", "items": [{"label": "1 h", "price": "250 $"}, {"label": "1 h 30", "price": "375 $"}]},
+      {"title": "Événements", "items": [{"label": "1 h", "price": "185 $"}, {"label": "2 h", "price": "350 $"}]},
+      {"title": "Mariage", "feature": true, "items": [{"label": "Essentiel (2 h)", "price": "500 $"}, {"label": "Classique (5 h)", "price": "1 100 $"}, {"label": "Prestige (8 h)", "price": "1 700 $"}]},
+      {"title": "Options supplémentaires", "items": [{"label": "Photo supplémentaire retouchée", "price": "10 $"}, {"label": "Livraison express (48 h)", "price": "50 $"}, {"label": "Déplacement hors secteur", "price": "selon la distance"}]}
+    ]
+  },
   "stats": [
     {"num": "25", "suffix": "+", "label": "Événements Couverts"},
     {"num": "20", "suffix": "+", "label": "Clients Satisfaits"},
