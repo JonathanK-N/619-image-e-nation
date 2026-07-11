@@ -33,9 +33,8 @@
     </a>
     <div class="nav-links" id="nav-links">
       <a href="#about"        class="nav-link">À Propos</a>
-      <a href="#services"     class="nav-link">Services</a>
+      <a href="#services"     class="nav-link">Services &amp; Tarifs</a>
       <a href="#portfolio"    class="nav-link">Portfolio</a>
-      <a href="#pricing"      class="nav-link">Tarifs</a>
       <a href="#testimonials" class="nav-link">Avis</a>
       <a href="#contact"      class="nav-link nav-cta">Réserver</a>
     </div>
@@ -132,102 +131,86 @@
   <!-- ╔══════════════════════════════════════╗
        ║           SERVICES SECTION           ║
        ╚══════════════════════════════════════╝ -->
-  <section id="services" class="services section">
+  <section id="services" class="offers section">
     <div class="container">
       <div class="section-header reveal-up">
-        <div class="section-eyebrow">Ce Que Nous Offrons</div>
-        <h2 class="section-title">Nos <em>Services</em></h2>
-        <p class="section-sub">Une expertise photographique adaptée à chaque événement</p>
+        <div class="section-eyebrow" id="offers-eyebrow">Nos Prestations</div>
+        <h2 class="section-title" id="offers-title">Services &amp; <em>Tarifs</em></h2>
+        <p class="section-sub">Choisissez la formule qui vous ressemble — réservez en un clic</p>
       </div>
 
-      <div class="services-grid" id="services-grid">
+      <div class="offers-grid" id="offers-grid">
 
-        <div class="svc-card reveal-up" data-delay="0">
-          <div class="svc-num">01</div>
-          <div class="svc-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-          </div>
-          <h3 class="svc-title">Mariages</h3>
-          <p class="svc-desc">Immortalisez le plus beau jour de votre vie avec des photos qui racontent votre histoire d'amour unique.</p>
-          <div class="svc-bg">
-            <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=500&q=70" alt="" loading="lazy" aria-hidden="true">
-          </div>
+        <div class="offer-card reveal-up" data-delay="0">
+          <div class="offer-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg></div>
+          <h3 class="offer-title">Portrait individuel</h3>
+          <p class="offer-desc">Des portraits authentiques qui révèlent votre personnalité et votre lumière intérieure.</p>
+          <ul class="offer-prices">
+            <li><span>30 min</span><span>125 $</span></li>
+            <li><span>1 h</span><span>185 $</span></li>
+          </ul>
+          <button class="btn btn-primary offer-btn" data-book="portrait" data-service="Portrait individuel"><span>Réserver</span></button>
         </div>
 
-        <div class="svc-card reveal-up" data-delay="80">
-          <div class="svc-num">02</div>
-          <div class="svc-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
-            </svg>
-          </div>
-          <h3 class="svc-title">Portraits</h3>
-          <p class="svc-desc">Des portraits authentiques qui capturent votre personnalité et révèlent votre lumière intérieure.</p>
-          <div class="svc-bg">
-            <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&q=70" alt="" loading="lazy" aria-hidden="true">
-          </div>
+        <div class="offer-card reveal-up" data-delay="80">
+          <div class="offer-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <h3 class="offer-title">Couple</h3>
+          <p class="offer-desc">Capturez la complicité et les émotions partagées, en studio ou en extérieur.</p>
+          <ul class="offer-prices">
+            <li><span>1 h</span><span>220 $</span></li>
+          </ul>
+          <button class="btn btn-primary offer-btn" data-book="portrait" data-service="Couple"><span>Réserver</span></button>
         </div>
 
-        <div class="svc-card reveal-up" data-delay="160">
-          <div class="svc-num">03</div>
-          <div class="svc-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-            </svg>
-          </div>
-          <h3 class="svc-title">Corporate</h3>
-          <p class="svc-desc">Conférences, lancements, galas — nous sublimez votre image professionnelle et institutionnelle.</p>
-          <div class="svc-bg">
-            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&q=70" alt="" loading="lazy" aria-hidden="true">
-          </div>
+        <div class="offer-card reveal-up" data-delay="160">
+          <div class="offer-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <h3 class="offer-title">Famille</h3>
+          <p class="offer-desc">Des souvenirs précieux réunissant petits et grands dans une ambiance naturelle.</p>
+          <ul class="offer-prices">
+            <li><span>1 h</span><span>250 $</span></li>
+            <li><span>1 h 30</span><span>375 $</span></li>
+          </ul>
+          <button class="btn btn-primary offer-btn" data-book="family" data-service="Famille"><span>Réserver</span></button>
         </div>
 
-        <div class="svc-card reveal-up" data-delay="240">
-          <div class="svc-num">04</div>
-          <div class="svc-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
-            </svg>
-          </div>
-          <h3 class="svc-title">Concerts &amp; Spectacles</h3>
-          <p class="svc-desc">L'énergie, la lumière, le mouvement — capturer la magie d'une performance live est notre spécialité.</p>
-          <div class="svc-bg">
-            <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=500&q=70" alt="" loading="lazy" aria-hidden="true">
-          </div>
+        <div class="offer-card reveal-up" data-delay="240">
+          <div class="offer-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
+          <h3 class="offer-title">Événements</h3>
+          <p class="offer-desc">Conférences, galas, lancements — votre événement immortalisé avec élégance.</p>
+          <ul class="offer-prices">
+            <li><span>1 h</span><span>185 $</span></li>
+            <li><span>2 h</span><span>350 $</span></li>
+          </ul>
+          <button class="btn btn-primary offer-btn" data-book="corporate" data-service="Événements"><span>Réserver</span></button>
         </div>
 
-        <div class="svc-card reveal-up" data-delay="320">
-          <div class="svc-num">05</div>
-          <div class="svc-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-            </svg>
-          </div>
-          <h3 class="svc-title">Famille &amp; Lifestyle</h3>
-          <p class="svc-desc">Moments du quotidien, anniversaires, réunions familiales — préservez vos souvenirs les plus chers.</p>
-          <div class="svc-bg">
-            <img src="https://images.unsplash.com/photo-1511895426328-dc8714191011?w=500&q=70" alt="" loading="lazy" aria-hidden="true">
-          </div>
+        <div class="offer-card offer-card--feature reveal-up" data-delay="320">
+          <div class="offer-badge">Le plus demandé</div>
+          <div class="offer-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 19.3 7.2 16.7l.9-5.4L4.2 7.7l5.4-.8z"/></svg></div>
+          <h3 class="offer-title">Mariage</h3>
+          <p class="offer-desc">Le plus beau jour de votre vie raconté en images, de la préparation à la fête.</p>
+          <ul class="offer-prices">
+            <li><span>Essentiel — 2 h</span><span>500 $</span></li>
+            <li><span>Classique — 5 h</span><span>1 100 $</span></li>
+            <li><span>Prestige — 8 h</span><span>1 700 $</span></li>
+          </ul>
+          <button class="btn btn-primary offer-btn" data-book="wedding" data-service="Mariage"><span>Réserver</span></button>
         </div>
 
-        <div class="svc-card reveal-up" data-delay="400">
-          <div class="svc-num">06</div>
-          <div class="svc-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/>
-            </svg>
-          </div>
-          <h3 class="svc-title">Sports &amp; Action</h3>
-          <p class="svc-desc">Chaque fraction de seconde compte. Nous saisissons l'intensité et la passion du sport en mouvement.</p>
-          <div class="svc-bg">
-            <img src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=500&q=70" alt="" loading="lazy" aria-hidden="true">
-          </div>
+        <div class="offer-card offer-card--info reveal-up" data-delay="400">
+          <div class="offer-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+          <h3 class="offer-title">Options supplémentaires</h3>
+          <p class="offer-desc">Personnalisez votre prestation selon vos besoins.</p>
+          <ul class="offer-prices">
+            <li><span>Photo retouchée supp.</span><span>10 $</span></li>
+            <li><span>Livraison express (48 h)</span><span>50 $</span></li>
+            <li><span>Déplacement hors secteur</span><span>selon distance</span></li>
+          </ul>
         </div>
 
       </div>
+
+      <p class="offers-note reveal-up" id="offers-note">Dépôt de 30 % requis pour confirmer la réservation.</p>
     </div>
   </section>
 
@@ -359,69 +342,6 @@
           </div>
         </div>
 
-      </div>
-    </div>
-  </section>
-
-  <!-- ╔══════════════════════════════════════╗
-       ║             PRICING SECTION          ║
-       ╚══════════════════════════════════════╝ -->
-  <section id="pricing" class="pricing section">
-    <div class="container">
-      <div class="section-header reveal-up">
-        <div class="section-eyebrow" id="pricing-eyebrow">Nos Tarifs</div>
-        <h2 class="section-title" id="pricing-title">Tarifs &amp; <em>Forfaits</em></h2>
-      </div>
-
-      <div class="pricing-grid" id="pricing-grid">
-        <div class="price-card reveal-up">
-          <h3 class="price-cat">Portrait individuel</h3>
-          <ul class="price-list">
-            <li><span class="price-label">30 min</span><span class="price-value">125 $</span></li>
-            <li><span class="price-label">1 h</span><span class="price-value">185 $</span></li>
-          </ul>
-        </div>
-        <div class="price-card reveal-up" data-delay="80">
-          <h3 class="price-cat">Couple</h3>
-          <ul class="price-list">
-            <li><span class="price-label">1 h</span><span class="price-value">220 $</span></li>
-          </ul>
-        </div>
-        <div class="price-card reveal-up" data-delay="160">
-          <h3 class="price-cat">Famille</h3>
-          <ul class="price-list">
-            <li><span class="price-label">1 h</span><span class="price-value">250 $</span></li>
-            <li><span class="price-label">1 h 30</span><span class="price-value">375 $</span></li>
-          </ul>
-        </div>
-        <div class="price-card reveal-up" data-delay="240">
-          <h3 class="price-cat">Événements</h3>
-          <ul class="price-list">
-            <li><span class="price-label">1 h</span><span class="price-value">185 $</span></li>
-            <li><span class="price-label">2 h</span><span class="price-value">350 $</span></li>
-          </ul>
-        </div>
-        <div class="price-card price-card--feature reveal-up" data-delay="320">
-          <h3 class="price-cat">Mariage</h3>
-          <ul class="price-list">
-            <li><span class="price-label">Essentiel (2 h)</span><span class="price-value">500 $</span></li>
-            <li><span class="price-label">Classique (5 h)</span><span class="price-value">1 100 $</span></li>
-            <li><span class="price-label">Prestige (8 h)</span><span class="price-value">1 700 $</span></li>
-          </ul>
-        </div>
-        <div class="price-card reveal-up" data-delay="400">
-          <h3 class="price-cat">Options supplémentaires</h3>
-          <ul class="price-list">
-            <li><span class="price-label">Photo supplémentaire retouchée</span><span class="price-value">10 $</span></li>
-            <li><span class="price-label">Livraison express (48 h)</span><span class="price-value">50 $</span></li>
-            <li><span class="price-label">Déplacement hors secteur</span><span class="price-value">selon la distance</span></li>
-          </ul>
-        </div>
-      </div>
-
-      <p class="pricing-note reveal-up" id="pricing-note">Dépôt de 30 % requis pour confirmer la réservation.</p>
-      <div class="pricing-cta reveal-up">
-        <a href="#contact" class="btn btn-primary"><span>Réserver une séance</span></a>
       </div>
     </div>
   </section>
@@ -707,6 +627,9 @@
           <a href="#">Confidentialité</a>
           <a href="#">Conditions</a>
         </div>
+      </div>
+      <div class="footer-credit">
+        Propulsé par <a href="https://cognito-inc.ca" target="_blank" rel="noopener">Cognito Inc.</a>
       </div>
     </div>
   </footer>

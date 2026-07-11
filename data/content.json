@@ -17,14 +17,19 @@
     "kpiNum": "+25",
     "kpiLabel": "Événements"
   },
-  "services": [
-    {"num": "01", "title": "Mariages", "desc": "Immortalisez le plus beau jour de votre vie avec des photos qui racontent votre histoire d'amour unique.", "image": "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=500&q=70"},
-    {"num": "02", "title": "Portraits", "desc": "Des portraits authentiques qui capturent votre personnalité et révèlent votre lumière intérieure.", "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&q=70"},
-    {"num": "03", "title": "Corporate", "desc": "Conférences, lancements, galas — nous sublimez votre image professionnelle et institutionnelle.", "image": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&q=70"},
-    {"num": "04", "title": "Concerts & Spectacles", "desc": "L'énergie, la lumière, le mouvement — capturer la magie d'une performance live est notre spécialité.", "image": "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=500&q=70"},
-    {"num": "05", "title": "Famille & Lifestyle", "desc": "Moments du quotidien, anniversaires, réunions familiales — préservez vos souvenirs les plus chers.", "image": "https://images.unsplash.com/photo-1511895426328-dc8714191011?w=500&q=70"},
-    {"num": "06", "title": "Sports & Action", "desc": "Chaque fraction de seconde compte. Nous saisissons l'intensité et la passion du sport en mouvement.", "image": "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=500&q=70"}
-  ],
+  "offerings": {
+    "eyebrow": "Nos Prestations",
+    "title": "Services & <em>Tarifs</em>",
+    "note": "Dépôt de 30 % requis pour confirmer la réservation.",
+    "items": [
+      {"icon": "portrait", "title": "Portrait individuel", "desc": "Des portraits authentiques qui révèlent votre personnalité et votre lumière intérieure.", "book": true, "bookType": "portrait", "prices": [{"label": "30 min", "price": "125 $"}, {"label": "1 h", "price": "185 $"}]},
+      {"icon": "couple", "title": "Couple", "desc": "Capturez la complicité et les émotions partagées, en studio ou en extérieur.", "book": true, "bookType": "portrait", "prices": [{"label": "1 h", "price": "220 $"}]},
+      {"icon": "family", "title": "Famille", "desc": "Des souvenirs précieux réunissant petits et grands dans une ambiance naturelle.", "book": true, "bookType": "family", "prices": [{"label": "1 h", "price": "250 $"}, {"label": "1 h 30", "price": "375 $"}]},
+      {"icon": "event", "title": "Événements", "desc": "Conférences, galas, lancements — votre événement immortalisé avec élégance.", "book": true, "bookType": "corporate", "prices": [{"label": "1 h", "price": "185 $"}, {"label": "2 h", "price": "350 $"}]},
+      {"icon": "wedding", "title": "Mariage", "desc": "Le plus beau jour de votre vie raconté en images, de la préparation à la fête.", "book": true, "bookType": "wedding", "feature": true, "badge": "Le plus demandé", "prices": [{"label": "Essentiel — 2 h", "price": "500 $"}, {"label": "Classique — 5 h", "price": "1 100 $"}, {"label": "Prestige — 8 h", "price": "1 700 $"}]},
+      {"icon": "options", "title": "Options supplémentaires", "desc": "Personnalisez votre prestation selon vos besoins.", "book": false, "prices": [{"label": "Photo retouchée supp.", "price": "10 $"}, {"label": "Livraison express (48 h)", "price": "50 $"}, {"label": "Déplacement hors secteur", "price": "selon distance"}]}
+    ]
+  },
   "portfolio": [
     {"cat": "wedding", "catLabel": "Mariage", "title": "Célébration Éternelle", "size": "wide", "image": "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=900&q=80"},
     {"cat": "portrait", "catLabel": "Portrait", "title": "Lumière Naturelle", "size": "", "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80"},
@@ -36,19 +41,6 @@
     {"cat": "event", "catLabel": "Événement", "title": "Gala de Luxe", "size": "", "image": "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&q=80"},
     {"cat": "portrait", "catLabel": "Portrait", "title": "Beauté Naturelle", "size": "", "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&q=80"}
   ],
-  "pricing": {
-    "eyebrow": "Nos Tarifs",
-    "title": "Tarifs & <em>Forfaits</em>",
-    "note": "Dépôt de 30 % requis pour confirmer la réservation.",
-    "categories": [
-      {"title": "Portrait individuel", "items": [{"label": "30 min", "price": "125 $"}, {"label": "1 h", "price": "185 $"}]},
-      {"title": "Couple", "items": [{"label": "1 h", "price": "220 $"}]},
-      {"title": "Famille", "items": [{"label": "1 h", "price": "250 $"}, {"label": "1 h 30", "price": "375 $"}]},
-      {"title": "Événements", "items": [{"label": "1 h", "price": "185 $"}, {"label": "2 h", "price": "350 $"}]},
-      {"title": "Mariage", "feature": true, "items": [{"label": "Essentiel (2 h)", "price": "500 $"}, {"label": "Classique (5 h)", "price": "1 100 $"}, {"label": "Prestige (8 h)", "price": "1 700 $"}]},
-      {"title": "Options supplémentaires", "items": [{"label": "Photo supplémentaire retouchée", "price": "10 $"}, {"label": "Livraison express (48 h)", "price": "50 $"}, {"label": "Déplacement hors secteur", "price": "selon la distance"}]}
-    ]
-  },
   "stats": [
     {"num": "25", "suffix": "+", "label": "Événements Couverts"},
     {"num": "20", "suffix": "+", "label": "Clients Satisfaits"},

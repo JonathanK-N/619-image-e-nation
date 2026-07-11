@@ -401,7 +401,34 @@ const esc = (s = '') => String(s).replace(/[&<>"']/g, m => (
   { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]
 ));
 
-const SVC_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
+const OFFER_ICONS = {
+  portrait: '<circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>',
+  couple: '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
+  family: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  event: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>',
+  wedding: '<path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 19.3 7.2 16.7l.9-5.4L4.2 7.7l5.4-.8z"/>',
+  concert: '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+  options: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
+  camera: '<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>'
+};
+const offerIcon = (k) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">${OFFER_ICONS[k] || OFFER_ICONS.camera}</svg>`;
+
+// Réserver : pré-sélectionne le service dans le formulaire et défile jusqu'au contact
+function reserveService(bookType, serviceName) {
+  const form = document.getElementById('contact-form');
+  const select = form?.querySelector('[name="event_type"]');
+  const msg = form?.querySelector('[name="message"]');
+  if (select && bookType) select.value = bookType;
+  if (msg && serviceName && !msg.value.trim()) {
+    msg.value = `Bonjour, je souhaite réserver : ${serviceName}.`;
+  }
+  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  setTimeout(() => form?.querySelector('[name="name"]')?.focus(), 600);
+}
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.offer-btn');
+  if (btn) { e.preventDefault(); reserveService(btn.dataset.book, btn.dataset.service); }
+});
 
 function initDynamicContent() {
   fetch('/api/content').then(r => r.json()).then(c => {
@@ -431,17 +458,28 @@ function initDynamicContent() {
     const cLoc = document.querySelector('[data-contact="location"]');
     if (cLoc && c.contact?.location) cLoc.textContent = c.contact.location;
 
-    // Services
-    const svcGrid = document.getElementById('services-grid');
-    if (svcGrid && Array.isArray(c.services) && c.services.length) {
-      svcGrid.innerHTML = c.services.map((s, i) => `
-        <div class="svc-card reveal-up" data-delay="${i * 80}">
-          <div class="svc-num">${esc(s.num)}</div>
-          <div class="svc-icon">${SVC_ICON}</div>
-          <h3 class="svc-title">${esc(s.title)}</h3>
-          <p class="svc-desc">${esc(s.desc)}</p>
-          <div class="svc-bg"><img src="${esc(s.image)}" alt="" loading="lazy" aria-hidden="true"></div>
-        </div>`).join('');
+    // Offerings (Services & Tarifs fusionnés)
+    if (c.offerings) {
+      const oEye = document.getElementById('offers-eyebrow');
+      if (oEye && c.offerings.eyebrow) oEye.textContent = c.offerings.eyebrow;
+      const oTitle = document.getElementById('offers-title');
+      if (oTitle && c.offerings.title) oTitle.innerHTML = c.offerings.title;
+      const oNote = document.getElementById('offers-note');
+      if (oNote) oNote.textContent = c.offerings.note || '';
+      const oGrid = document.getElementById('offers-grid');
+      if (oGrid && Array.isArray(c.offerings.items) && c.offerings.items.length) {
+        oGrid.innerHTML = c.offerings.items.map((o, i) => `
+          <div class="offer-card${o.feature ? ' offer-card--feature' : ''}${o.book === false ? ' offer-card--info' : ''} reveal-up" data-delay="${i * 80}">
+            ${o.badge ? `<div class="offer-badge">${esc(o.badge)}</div>` : ''}
+            <div class="offer-icon">${offerIcon(o.icon)}</div>
+            <h3 class="offer-title">${esc(o.title)}</h3>
+            <p class="offer-desc">${esc(o.desc)}</p>
+            <ul class="offer-prices">
+              ${(o.prices || []).map(p => `<li><span>${esc(p.label)}</span><span>${esc(p.price)}</span></li>`).join('')}
+            </ul>
+            ${o.book === false ? '' : `<button class="btn btn-primary offer-btn" data-book="${esc(o.bookType || '')}" data-service="${esc(o.title)}"><span>Réserver</span></button>`}
+          </div>`).join('');
+      }
     }
 
     // Stats
@@ -455,27 +493,6 @@ function initDynamicContent() {
           <div class="stat-lbl">${esc(s.label)}</div>
         </div>`).join('');
       initCounters();
-    }
-
-    // Pricing
-    if (c.pricing) {
-      const pEye = document.getElementById('pricing-eyebrow');
-      if (pEye && c.pricing.eyebrow) pEye.textContent = c.pricing.eyebrow;
-      const pTitle = document.getElementById('pricing-title');
-      if (pTitle && c.pricing.title) pTitle.innerHTML = c.pricing.title;
-      const pNote = document.getElementById('pricing-note');
-      if (pNote) pNote.textContent = c.pricing.note || '';
-      const pGrid = document.getElementById('pricing-grid');
-      if (pGrid && Array.isArray(c.pricing.categories) && c.pricing.categories.length) {
-        pGrid.innerHTML = c.pricing.categories.map((cat, i) => `
-          <div class="price-card${cat.feature ? ' price-card--feature' : ''} reveal-up" data-delay="${i * 80}">
-            <h3 class="price-cat">${esc(cat.title)}</h3>
-            <ul class="price-list">
-              ${(cat.items || []).map(it => `
-                <li><span class="price-label">${esc(it.label)}</span><span class="price-value">${esc(it.price)}</span></li>`).join('')}
-            </ul>
-          </div>`).join('');
-      }
     }
 
     // Portfolio
