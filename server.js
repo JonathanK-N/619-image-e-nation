@@ -3,6 +3,18 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 const multer = require('multer');
+
+// Nettoie CLOUDINARY_URL AVANT de charger la lib : cloudinary valide la variable
+// dès le require et fait crasher l'app si le format est invalide.
+if (process.env.CLOUDINARY_URL) {
+  const clean = process.env.CLOUDINARY_URL.trim().replace(/^["']|["']$/g, '');
+  if (/^cloudinary:\/\//.test(clean)) {
+    process.env.CLOUDINARY_URL = clean;
+  } else {
+    console.warn('⚠️  CLOUDINARY_URL ignoré : doit commencer par "cloudinary://". Repli sur le stockage disque.');
+    delete process.env.CLOUDINARY_URL;
+  }
+}
 const cloudinary = require('cloudinary').v2;
 
 const app = express();
