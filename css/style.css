@@ -800,24 +800,24 @@ input, textarea, select { font-family: inherit; }
   background: rgba(192,192,192,0.04);
 }
 
-/* Masonry-style grid */
+/* Masonry-style grid — auto rows pour supporter un nombre variable de photos */
 .portfolio-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 260px);
+  grid-auto-rows: clamp(200px, 24vw, 280px);
   gap: var(--s-2);
 }
 
 @media (max-width: 900px) {
   .portfolio-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(5, 220px);
+    grid-auto-rows: clamp(200px, 34vw, 240px);
   }
 }
 @media (max-width: 560px) {
   .portfolio-grid {
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(9, 240px);
+    grid-auto-rows: clamp(240px, 66vw, 320px);
   }
 }
 
@@ -1548,6 +1548,57 @@ a.contact-val:hover { color: var(--c-white); }
 
 @keyframes bsCircle { to { stroke-dashoffset: 0; } }
 @keyframes bsMark { to { stroke-dashoffset: 0; } }
+
+/* ─── 18d. Responsive polish (tous écrans) ──────────────────── */
+/* Sécurité anti-débordement horizontal */
+html { overflow-x: hidden; }
+body { max-width: 100%; }
+.container { max-width: 1280px; }
+img, svg, video { max-width: 100%; }
+/* Évite qu'un mot/URL trop long élargisse la page */
+.about-body, .testi-quote, .offer-desc, .footer-tagline, p { overflow-wrap: break-word; }
+
+/* Grands écrans : on élargit légèrement pour ne pas paraître étriqué */
+@media (min-width: 1600px) {
+  .container { max-width: 1440px; }
+}
+
+/* Tablettes */
+@media (max-width: 1024px) {
+  .section { padding: var(--s-24) 0; }
+  .section-header { margin-bottom: var(--s-12); }
+}
+
+/* Téléphones */
+@media (max-width: 600px) {
+  .section-header { margin-bottom: var(--s-10); }
+  .section-sub { padding: 0 var(--s-4); }
+  /* Boutons pleine largeur et empilés dans le hero */
+  .hero-actions { flex-direction: column; width: 100%; max-width: 320px; margin-inline: auto; gap: var(--s-3); }
+  .hero-actions .btn { width: 100%; justify-content: center; }
+  .btn { padding: 14px 24px; }
+  /* Cartes prestations plus aérées */
+  .offer-card { padding: var(--s-6) var(--s-5) var(--s-5); }
+  .offer-badge { right: var(--s-4); }
+  /* Témoignages : moins de padding latéral */
+  .testi-card { padding: var(--s-10) var(--s-6); }
+  /* Portfolio filtres : centrés et espacés pour le tactile */
+  .portfolio-filters { gap: var(--s-1) var(--s-2); }
+}
+
+/* Très petits téléphones */
+@media (max-width: 380px) {
+  .hero-title { font-size: clamp(1.5rem, 8.5vw, 2rem); }
+  .brand-main { font-size: 0.74rem; letter-spacing: 0.2em; }
+  .brand-sub { letter-spacing: 0.3em; }
+  .container { padding: 0 var(--s-3); }
+}
+
+/* Écrans bas / paysage mobile : le hero ne force pas 100dvh */
+@media (max-height: 560px) and (orientation: landscape) {
+  .hero { min-height: 0; height: auto; padding: 120px 0 80px; }
+  .hero-badge, .hero-scroll { display: none; }
+}
 
 /* ─── 19. Reduced Motion ────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
