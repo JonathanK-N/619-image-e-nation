@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,14 +14,59 @@ const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || 'YOUR_CHAT_ID';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin619';
 const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
 
+// ─── Persistent storage dirs (override with env for Railway volume) ───
+// e.g. mount a volume at /data then set DATA_DIR=/data/store, UPLOADS_DIR=/data/uploads
+const SEED_DIR = path.join(__dirname, 'data');
+const DATA_DIR = process.env.DATA_DIR || SEED_DIR;
+const UPLOADS_DIR = process.env.UPLOADS_DIR || path.join(__dirname, 'uploads');
+
+if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+
+// Seed data files onto the (possibly empty) persistent volume on first boot
+['content.json', 'bookings.json', 'reviews.json', 'media.json'].forEach((file) => {
+  const dest = path.join(DATA_DIR, file);
+  if (fs.existsSync(dest)) return;
+  const seed = path.join(SEED_DIR, file);
+  const fallback = file === 'content.json' ? '{}' : '[]';
+  fs.writeFileSync(dest, fs.existsSync(seed) ? fs.readFileSync(seed) : fallback);
+});
+
 // ─── Helpers ───
-const DATA_DIR = path.join(__dirname, 'data');
 const readJSON = (file) => JSON.parse(fs.readFileSync(path.join(DATA_DIR, file), 'utf8'));
 const writeJSON = (file, data) => fs.writeFileSync(path.join(DATA_DIR, file), JSON.stringify(data, null, 2));
+
+// ─── Cloudinary (primary durable storage — used when configured) ───
+if (process.env.CLOUDINARY_URL) {
+  cloudinary.config({ secure: true }); // reads CLOUDINARY_URL automatically
+} else if (process.env.CLOUDINARY_CLOUD_NAME) {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+    secure: true
+  });
+}
+const USE_CLOUDINARY = Boolean(process.env.CLOUDINARY_URL || process.env.CLOUDINARY_CLOUD_NAME);
+const CLOUDINARY_FOLDER = process.env.CLOUDINARY_FOLDER || 'image-e-nation';
+
+// ─── Upload config (memory storage → route to Cloudinary or disk) ───
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
+
+function uploadToCloudinary(buffer) {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: CLOUDINARY_FOLDER, resource_type: 'image' },
+      (err, result) => (err ? reject(err) : resolve(result))
+    );
+    stream.end(buffer);
+  });
+}
 
 // ─── Middleware ───
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(UPLOADS_DIR));
 app.use(express.static(path.join(__dirname), { maxAge: '1d', etag: true }));
 
 // Simple auth middleware
@@ -217,10 +264,70 @@ app.post('/api/reviews/:id/action', async (req, res) => {
   res.json({ success: true });
 });
 
-// ─── TELEGRAM WEBHOOK (for inline button callbacks) ───
-app.post('/api/telegram/webhook', async (req, res) => {
-  // Optional: handle callback_query if using callback_data instead of URLs
-  res.sendStatus(200);
+// ─── UPLOAD API ───
+// media.json = unified index of uploaded photos across providers (cloudinary | local)
+const readMedia = () => { try { return readJSON('media.json'); } catch { return []; } };
+
+app.post('/api/upload', authAdmin, upload.single('image'), async (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'Aucun fichier' });
+  try {
+    const media = readMedia();
+    let entry;
+
+    if (USE_CLOUDINARY) {
+      const result = await uploadToCloudinary(req.file.buffer);
+      entry = {
+        id: result.public_id,
+        url: result.secure_url,
+        provider: 'cloudinary',
+        publicId: result.public_id,
+        createdAt: new Date().toISOString()
+      };
+    } else {
+      const ext = path.extname(req.file.originalname) || '.jpg';
+      const filename = `${Date.now()}-${crypto.randomBytes(4).toString('hex')}${ext}`;
+      fs.writeFileSync(path.join(UPLOADS_DIR, filename), req.file.buffer);
+      entry = {
+        id: filename,
+        url: `/uploads/${filename}`,
+        provider: 'local',
+        filename,
+        createdAt: new Date().toISOString()
+      };
+    }
+
+    media.push(entry);
+    writeJSON('media.json', media);
+    res.json({ url: entry.url, id: entry.id, filename: entry.filename || entry.id });
+  } catch (e) {
+    console.error('Upload error:', e.message);
+    res.status(500).json({ error: 'Échec du téléversement' });
+  }
+});
+
+app.get('/api/uploads', authAdmin, (req, res) => {
+  const media = readMedia().slice().reverse();
+  res.json(media.map(m => ({ id: m.id, filename: m.filename || m.id, url: m.url, provider: m.provider })));
+});
+
+app.delete('/api/uploads/:id', authAdmin, async (req, res) => {
+  const id = decodeURIComponent(req.params.id);
+  const media = readMedia();
+  const entry = media.find(m => m.id === id || m.filename === id);
+  try {
+    if (entry?.provider === 'cloudinary') {
+      await cloudinary.uploader.destroy(entry.publicId);
+    } else {
+      const filename = entry?.filename || id;
+      const filepath = path.join(UPLOADS_DIR, path.basename(filename));
+      if (fs.existsSync(filepath)) fs.unlinkSync(filepath);
+    }
+    writeJSON('media.json', media.filter(m => m !== entry));
+    res.json({ success: true });
+  } catch (e) {
+    console.error('Delete error:', e.message);
+    res.status(500).json({ error: 'Suppression échouée' });
+  }
 });
 
 // ─── SPA fallback ───

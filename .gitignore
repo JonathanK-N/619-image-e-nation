@@ -7,3 +7,5 @@ npm-debug.log*
 Thumbs.db
 data/bookings.json
 data/reviews.json
+data/media.json
+uploads/

@@ -382,6 +382,12 @@ function initContactForm() {
 }
 
 /* ─── Load Dynamic Content ───────────────────────────────────── */
+const esc = (s = '') => String(s).replace(/[&<>"']/g, m => (
+  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]
+));
+
+const SVC_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
+
 function initDynamicContent() {
   fetch('/api/content').then(r => r.json()).then(c => {
     // Hero
@@ -401,6 +407,62 @@ function initDynamicContent() {
     if (kpiNum && c.about?.kpiNum) kpiNum.textContent = c.about.kpiNum;
     const kpiLabel = document.querySelector('.kpi-label');
     if (kpiLabel && c.about?.kpiLabel) kpiLabel.textContent = c.about.kpiLabel;
+
+    // Contact
+    const cPhone = document.querySelector('[data-contact="phone"]');
+    if (cPhone && c.contact?.phone) cPhone.textContent = c.contact.phone;
+    const cEmail = document.querySelector('[data-contact="email"]');
+    if (cEmail && c.contact?.email) cEmail.textContent = c.contact.email;
+    const cLoc = document.querySelector('[data-contact="location"]');
+    if (cLoc && c.contact?.location) cLoc.textContent = c.contact.location;
+
+    // Services
+    const svcGrid = document.getElementById('services-grid');
+    if (svcGrid && Array.isArray(c.services) && c.services.length) {
+      svcGrid.innerHTML = c.services.map((s, i) => `
+        <div class="svc-card reveal-up" data-delay="${i * 80}">
+          <div class="svc-num">${esc(s.num)}</div>
+          <div class="svc-icon">${SVC_ICON}</div>
+          <h3 class="svc-title">${esc(s.title)}</h3>
+          <p class="svc-desc">${esc(s.desc)}</p>
+          <div class="svc-bg"><img src="${esc(s.image)}" alt="" loading="lazy" aria-hidden="true"></div>
+        </div>`).join('');
+    }
+
+    // Stats
+    const statsGrid = document.getElementById('stats-grid');
+    if (statsGrid && Array.isArray(c.stats) && c.stats.length) {
+      statsGrid.innerHTML = c.stats.map((s, i) => `
+        <div class="stat-item reveal-up" data-delay="${i * 100}">
+          <div class="stat-wrap">
+            <span class="stat-num" data-target="${parseInt(s.num, 10) || 0}">0</span><span class="stat-suf">${esc(s.suffix)}</span>
+          </div>
+          <div class="stat-lbl">${esc(s.label)}</div>
+        </div>`).join('');
+      initCounters();
+    }
+
+    // Portfolio
+    const portGrid = document.getElementById('portfolio-grid');
+    if (portGrid && Array.isArray(c.portfolio) && c.portfolio.length) {
+      portGrid.innerHTML = c.portfolio.map(p => `
+        <div class="port-item${p.size ? ' port-item--' + esc(p.size) : ''}" data-cat="${esc(p.cat)}">
+          <img src="${esc(p.image)}" alt="${esc(p.catLabel)} — ${esc(p.title)}" loading="lazy">
+          <div class="port-overlay">
+            <div class="port-meta"><span class="port-cat">${esc(p.catLabel)}</span><h3>${esc(p.title)}</h3></div>
+            <button class="port-zoom" aria-label="Agrandir ${esc(p.title)}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+          </div>
+        </div>`).join('');
+      initPortfolioFilter();
+      initLightbox();
+    }
+
+    // Re-reveal freshly injected content
+    initScrollReveal();
   }).catch(() => {});
 
   // Load approved reviews
