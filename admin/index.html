@@ -546,25 +546,44 @@ function showDashboard() {
   document.getElementById('dashboard').classList.add('show');
   buildNav();
   buildImageFields();
-  checkTelegram();
+  checkStatus();
   loadContent();
   loadBookings();
   loadReviews();
   loadMedia();
 }
 
-async function checkTelegram() {
+async function checkStatus() {
   try {
     const res = await fetch('/api/admin/verify', { headers: { 'x-admin-token': token } });
     if (!res.ok) return;
     const data = await res.json();
     const box = document.getElementById('tg-notice');
-    box.innerHTML = data.telegram ? '' : `
-      <div class="card" style="border-left:3px solid var(--amber);margin-bottom:22px">
-        <strong style="color:var(--amber)">⚠️ Notifications Telegram désactivées.</strong>
-        <p class="hint" style="margin-top:6px">Les réservations s'enregistrent bien ici, mais aucune alerte n'est envoyée sur Telegram.
-        Configurez <code>TELEGRAM_BOT_TOKEN</code> et <code>TELEGRAM_CHAT_ID</code> sur Railway pour les recevoir.</p>
-      </div>`;
+    let html = '';
+
+    // Alerte stockage : la galerie ne survivra pas au redéploiement
+    if (data.storage && !data.storage.durable) {
+      const reasons = [];
+      if (!data.storage.dataPersistent) reasons.push('les modifications de contenu (galerie, textes)');
+      if (!data.storage.cloudinary && !data.storage.uploadsPersistent) reasons.push('les photos téléversées');
+      html += `
+        <div class="card" style="border-left:3px solid var(--red);margin-bottom:22px">
+          <strong style="color:var(--red)">❌ Stockage non durable — vos photos seront perdues au prochain redéploiement.</strong>
+          <p class="hint" style="margin-top:6px">Concerné : ${reasons.join(' et ')}.
+          Pour corriger : sur Railway, <b>attachez un volume</b> au service (détecté automatiquement) et/ou configurez <b>Cloudinary</b>
+          (<code>CLOUDINARY_URL</code>). Puis redéployez.</p>
+        </div>`;
+    }
+
+    if (!data.telegram) {
+      html += `
+        <div class="card" style="border-left:3px solid var(--amber);margin-bottom:22px">
+          <strong style="color:var(--amber)">⚠️ Notifications Telegram désactivées.</strong>
+          <p class="hint" style="margin-top:6px">Les réservations s'enregistrent bien ici, mais aucune alerte n'est envoyée sur Telegram.
+          Configurez <code>TELEGRAM_BOT_TOKEN</code> et <code>TELEGRAM_CHAT_ID</code> sur Railway pour les recevoir.</p>
+        </div>`;
+    }
+    box.innerHTML = html;
   } catch {}
 }
 

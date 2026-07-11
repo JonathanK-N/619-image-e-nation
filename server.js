@@ -27,11 +27,19 @@ const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || 'YOUR_CHAT_ID';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin619';
 const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
 
-// ─── Persistent storage dirs (override with env for Railway volume) ───
-// e.g. mount a volume at /data then set DATA_DIR=/data/store, UPLOADS_DIR=/data/uploads
+// ─── Persistent storage dirs ───
+// IMPORTANT : par défaut les données vivent dans le dépôt, donc un redéploiement
+// écrase les modifications (Git). Si un volume Railway est monté, on l'utilise
+// AUTOMATIQUEMENT (via RAILWAY_VOLUME_MOUNT_PATH) — aucune config manuelle requise.
+// On peut aussi forcer les chemins avec DATA_DIR / UPLOADS_DIR.
 const SEED_DIR = path.join(__dirname, 'data');
-const DATA_DIR = process.env.DATA_DIR || SEED_DIR;
-const UPLOADS_DIR = process.env.UPLOADS_DIR || path.join(__dirname, 'uploads');
+const VOLUME = process.env.RAILWAY_VOLUME_MOUNT_PATH; // défini par Railway si un volume est attaché
+const DATA_DIR = process.env.DATA_DIR || (VOLUME ? path.join(VOLUME, 'store') : SEED_DIR);
+const UPLOADS_DIR = process.env.UPLOADS_DIR || (VOLUME ? path.join(VOLUME, 'uploads') : path.join(__dirname, 'uploads'));
+
+// Stockage durable ? (volume monté ou chemins explicites hors du dépôt)
+const DATA_PERSISTENT = DATA_DIR !== SEED_DIR;
+const UPLOADS_PERSISTENT = UPLOADS_DIR !== path.join(__dirname, 'uploads');
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
@@ -139,7 +147,19 @@ app.post('/api/admin/login', (req, res) => {
 
 // Vérifie qu'un jeton est encore valide (endpoint authentifié, contrairement à /api/content)
 app.get('/api/admin/verify', authAdmin, (req, res) => {
-  res.json({ ok: true, telegram: TELEGRAM_ENABLED });
+  // Le contenu (galerie) est-il durable ? OK si volume/chemin persistant OU si les
+  // images vont sur Cloudinary ET les données sur un volume.
+  res.json({
+    ok: true,
+    telegram: TELEGRAM_ENABLED,
+    storage: {
+      cloudinary: USE_CLOUDINARY,
+      dataPersistent: DATA_PERSISTENT,
+      uploadsPersistent: UPLOADS_PERSISTENT || USE_CLOUDINARY,
+      // Une galerie survit au redéploiement seulement si content.json est persistant
+      durable: DATA_PERSISTENT && (USE_CLOUDINARY || UPLOADS_PERSISTENT)
+    }
+  });
 });
 
 // ─── CONTENT API ───
@@ -378,8 +398,15 @@ app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.listen(PORT, () => {
   console.log(`IMAGE-E-NATION server running on port ${PORT}`);
   console.log(`Admin panel: ${BASE_URL}/admin`);
-  console.log(`Stockage photos : ${USE_CLOUDINARY ? 'Cloudinary' : 'disque (' + UPLOADS_DIR + ')'}`);
-  console.log(`Données : ${DATA_DIR}`);
+  console.log(`Stockage photos : ${USE_CLOUDINARY ? 'Cloudinary ✓' : 'disque (' + UPLOADS_DIR + ')'}`);
+  console.log(`Données : ${DATA_DIR}${DATA_PERSISTENT ? ' (persistant ✓)' : ''}`);
+  if (VOLUME) console.log(`Volume Railway détecté : ${VOLUME}`);
+  if (!DATA_PERSISTENT) {
+    console.warn('❌ STOCKAGE ÉPHÉMÈRE : les modifications admin (galerie incluse) seront PERDUES au prochain redéploiement.');
+    console.warn('   → Attachez un volume Railway (détecté automatiquement) ou définissez DATA_DIR/UPLOADS_DIR, et/ou configurez Cloudinary.');
+  } else if (!USE_CLOUDINARY && !UPLOADS_PERSISTENT) {
+    console.warn('⚠️  Données persistantes mais photos sur disque éphémère : configurez Cloudinary ou UPLOADS_DIR.');
+  }
   if (TELEGRAM_ENABLED) console.log('Telegram : activé ✓');
   else console.warn('⚠️  Telegram : DÉSACTIVÉ — définissez TELEGRAM_BOT_TOKEN et TELEGRAM_CHAT_ID pour recevoir les notifications de RDV.');
   if (/localhost|127\.0\.0\.1/.test(BASE_URL))
