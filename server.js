@@ -18,6 +18,7 @@ if (process.env.CLOUDINARY_URL) {
 const cloudinary = require('cloudinary').v2;
 
 const app = express();
+app.set('trust proxy', true); // Railway/proxy : req.protocol reflète x-forwarded-proto
 const PORT = process.env.PORT || 3000;
 
 // ─── Config (set via environment variables) ───
@@ -92,6 +93,14 @@ function generateToken(password) {
   return crypto.createHash('sha256').update(password).digest('hex');
 }
 
+// URL publique fiable pour les liens Telegram : préfère BASE_URL s'il est valide,
+// sinon la déduit de la requête (fonctionne sur Railway sans config).
+function baseUrl(req) {
+  const env = (BASE_URL || '').replace(/\/$/, '');
+  if (env && !/localhost|127\.0\.0\.1/.test(env)) return env;
+  return `${req.protocol}://${req.get('host')}`;
+}
+
 // ─── Telegram Bot ───
 const TELEGRAM_ENABLED =
   TELEGRAM_BOT_TOKEN && TELEGRAM_BOT_TOKEN !== 'YOUR_BOT_TOKEN' &&
@@ -164,10 +173,11 @@ app.post('/api/bookings', async (req, res) => {
     `💬 <b>Message:</b> ${booking.message}\n` +
     `📅 <b>Date demande:</b> ${new Date(booking.createdAt).toLocaleString('fr-CA')}`;
 
+  const base = baseUrl(req);
   await sendTelegram(text, [
     [
-      { text: '✅ Confirmer', url: `${BASE_URL}/admin/booking-action?id=${booking.id}&action=confirm` },
-      { text: '❌ Annuler', url: `${BASE_URL}/admin/booking-action?id=${booking.id}&action=cancel` }
+      { text: '✅ Confirmer', url: `${base}/admin/booking-action?id=${booking.id}&action=confirm` },
+      { text: '❌ Annuler', url: `${base}/admin/booking-action?id=${booking.id}&action=cancel` }
     ]
   ]);
 
@@ -176,6 +186,15 @@ app.post('/api/bookings', async (req, res) => {
 
 app.get('/api/bookings', authAdmin, (req, res) => {
   res.json(readJSON('bookings.json'));
+});
+
+// Détail d'une réservation par ID (UUID non devinable) — public, pour la page
+// d'action ouverte depuis Telegram qui n'a pas de jeton admin.
+app.get('/api/bookings/:id', (req, res) => {
+  const booking = readJSON('bookings.json').find(b => b.id === req.params.id);
+  if (!booking) return res.status(404).json({ error: 'Rendez-vous non trouvé' });
+  const { name, email, phone, event_type, message, status, createdAt } = booking;
+  res.json({ name, email, phone, event_type, message, status, createdAt });
 });
 
 // ─── BOOKING ACTION PAGE (from Telegram) ───
@@ -213,7 +232,7 @@ app.post('/api/bookings/:id/request-review', authAdmin, async (req, res) => {
   const booking = bookings.find(b => b.id === id);
   if (!booking) return res.status(404).json({ error: 'Non trouvé' });
 
-  const reviewLink = `${BASE_URL}/leave-review.html?bookingId=${id}&name=${encodeURIComponent(booking.name)}`;
+  const reviewLink = `${baseUrl(req)}/leave-review.html?bookingId=${id}&name=${encodeURIComponent(booking.name)}`;
 
   await sendTelegram(
     `🎬 <b>Séance terminée!</b>\n\n` +
@@ -252,8 +271,8 @@ app.post('/api/reviews', async (req, res) => {
     `💬 "${review.message}"\n\n` +
     `🎯 Type: ${review.role || 'Client'}`,
     [[
-      { text: '✅ Approuver', url: `${BASE_URL}/admin/review-action?id=${review.id}&action=approve` },
-      { text: '❌ Rejeter', url: `${BASE_URL}/admin/review-action?id=${review.id}&action=reject` }
+      { text: '✅ Approuver', url: `${baseUrl(req)}/admin/review-action?id=${review.id}&action=approve` },
+      { text: '❌ Rejeter', url: `${baseUrl(req)}/admin/review-action?id=${review.id}&action=reject` }
     ]]
   );
 
@@ -363,4 +382,6 @@ app.listen(PORT, () => {
   console.log(`Données : ${DATA_DIR}`);
   if (TELEGRAM_ENABLED) console.log('Telegram : activé ✓');
   else console.warn('⚠️  Telegram : DÉSACTIVÉ — définissez TELEGRAM_BOT_TOKEN et TELEGRAM_CHAT_ID pour recevoir les notifications de RDV.');
+  if (/localhost|127\.0\.0\.1/.test(BASE_URL))
+    console.warn('ℹ️  BASE_URL non défini (localhost). Les liens Telegram sont déduits automatiquement de la requête — définissez BASE_URL avec votre domaine Railway pour plus de fiabilité.');
 });

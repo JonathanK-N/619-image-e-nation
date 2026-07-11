@@ -58,21 +58,20 @@
     const confirmBtn = document.getElementById('confirm-btn');
     if (action === 'cancel') confirmBtn.classList.add('cancel-action');
 
-    // Load booking info
-    fetch(`/api/bookings`, { headers: { 'x-admin-token': localStorage.getItem('admin_token') || '' } })
-      .then(r => r.json())
-      .then(bookings => {
-        const b = bookings.find(x => x.id === bookingId);
-        if (b) {
-          document.getElementById('booking-info').innerHTML = 
-            `<strong>Nom:</strong> ${b.name}<br>` +
-            `<strong>Email:</strong> ${b.email}<br>` +
-            `<strong>Tél:</strong> ${b.phone || 'Non fourni'}<br>` +
-            `<strong>Type:</strong> ${b.event_type || 'Non spécifié'}<br>` +
-            `<strong>Message:</strong> ${b.message}`;
-        }
+    // Load booking info (endpoint public par ID — fonctionne dans le navigateur Telegram)
+    let booking = null;
+    fetch(`/api/bookings/${bookingId}`)
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(b => {
+        booking = b;
+        document.getElementById('booking-info').innerHTML =
+          `<strong>Nom:</strong> ${b.name}<br>` +
+          `<strong>Email:</strong> ${b.email}<br>` +
+          `<strong>Tél:</strong> ${b.phone || 'Non fourni'}<br>` +
+          `<strong>Type:</strong> ${b.event_type || 'Non spécifié'}<br>` +
+          `<strong>Message:</strong> ${b.message || ''}`;
       }).catch(() => {
-        document.getElementById('booking-info').textContent = 'ID: ' + bookingId;
+        document.getElementById('booking-info').textContent = 'Réservation introuvable (ID: ' + bookingId + ')';
       });
 
     function selectMethod(method) {
@@ -101,11 +100,33 @@
         result.className = 'result success';
         const verb = action === 'confirm' ? 'confirmé' : 'annulé';
         const methodText = selectedMethod === 'email' ? 'par email' : 'par WhatsApp';
-        result.textContent = `✓ Rendez-vous ${verb}. Notification ${methodText}.`;
+        result.innerHTML = `✓ Rendez-vous ${verb}.<br>Ouverture de ${methodText}…`;
+        openContact();
       } else {
         result.className = 'result error';
         result.textContent = '✗ Erreur lors du traitement.';
       }
+    }
+
+    // Ouvre le mail ou WhatsApp pré-rempli avec un message adapté
+    function openContact() {
+      if (!booking) return;
+      const confirmed = action === 'confirm';
+      const subject = confirmed
+        ? 'Confirmation de votre rendez-vous — IMAGE-E-NATION By 6i9'
+        : 'Concernant votre demande de rendez-vous — IMAGE-E-NATION By 6i9';
+      const body = confirmed
+        ? `Bonjour ${booking.name},\n\nC'est avec plaisir que je confirme votre rendez-vous (${booking.event_type || 'séance photo'}). Je reviens vers vous pour finaliser les détails.\n\nUn dépôt de 30 % est requis pour valider la réservation.\n\nÀ très bientôt,\nIMAGE-E-NATION By 6i9`
+        : `Bonjour ${booking.name},\n\nMerci pour votre demande de rendez-vous. Malheureusement, je ne suis pas en mesure d'y donner suite pour la date souhaitée. N'hésitez pas à me recontacter pour d'autres disponibilités.\n\nCordialement,\nIMAGE-E-NATION By 6i9`;
+
+      let link;
+      if (selectedMethod === 'email') {
+        link = `mailto:${booking.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      } else {
+        const phone = (booking.phone || '').replace(/[^\d]/g, '');
+        link = `https://wa.me/${phone}?text=${encodeURIComponent(body)}`;
+      }
+      setTimeout(() => { window.location.href = link; }, 900);
     }
   </script>
 </body>

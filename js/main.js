@@ -358,16 +358,11 @@ function initContactForm() {
         body: JSON.stringify(data)
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      textEl.textContent = '✓ Message Envoyé';
-      btn.style.background = 'var(--c-black-card)';
-      btn.style.borderColor = 'var(--c-silver-low)';
-      setTimeout(() => {
-        btn.disabled = false;
-        textEl.textContent = orig;
-        btn.style.background = '';
-        btn.style.borderColor = '';
-        form.reset();
-      }, 3200);
+      // Réinitialise le bouton et affiche l'animation de confirmation
+      btn.disabled = false;
+      textEl.textContent = orig;
+      form.reset();
+      showBookingSuccess();
     } catch {
       textEl.textContent = '✗ Erreur';
       setTimeout(() => { btn.disabled = false; textEl.textContent = orig; }, 2000);
@@ -379,6 +374,25 @@ function initContactForm() {
       field.style.borderColor = !field.value.trim() ? '#c0392b' : '';
     });
     field.addEventListener('input', () => { field.style.borderColor = ''; });
+  });
+
+  // Overlay de confirmation
+  const overlay = document.getElementById('booking-success');
+  const closeBtn = document.getElementById('bs-close');
+  window.showBookingSuccess = () => {
+    if (!overlay) return;
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+  const hide = () => {
+    if (!overlay) return;
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+  closeBtn?.addEventListener('click', hide);
+  overlay?.querySelector('.bs-backdrop')?.addEventListener('click', hide);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && overlay?.classList.contains('open')) hide();
   });
 }
 
