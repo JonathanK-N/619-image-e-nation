@@ -461,10 +461,10 @@ input, textarea, select { font-family: inherit; }
 
 .hero-title {
   font-family: var(--f-display);
-  font-size: clamp(3rem, 10vw, 9rem);
+  font-size: clamp(1.8rem, 7vw, 5.6rem);
   font-weight: 800;
-  line-height: 0.95;
-  letter-spacing: 0.04em;
+  line-height: 0.98;
+  letter-spacing: 0.015em;
   color: var(--c-white);
   display: flex;
   flex-direction: column;
@@ -472,7 +472,8 @@ input, textarea, select { font-family: inherit; }
   margin-bottom: var(--s-6);
 }
 
-.hero-line { display: block; }
+/* IMAGE-E-NATION reste sur une seule ligne (la taille s'adapte à l'écran) */
+.hero-line { display: block; white-space: nowrap; }
 
 .hero-line--accent {
   font-family: var(--f-serif);
