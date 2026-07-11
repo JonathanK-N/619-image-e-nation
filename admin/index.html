@@ -288,6 +288,7 @@
 
       <!-- DASHBOARD -->
       <section class="tab active" id="tab-dashboard">
+        <div id="tg-notice"></div>
         <div class="stat-cards" id="stat-cards"></div>
         <div class="card">
           <div class="card-head"><h3>Derniers rendez-vous</h3></div>
@@ -530,15 +531,41 @@ async function doLogin() {
 }
 function logout() { localStorage.removeItem('admin_token'); location.reload(); }
 
+// Jeton refusé par le serveur → session expirée, on renvoie au login
+function forceLogin(msg) {
+  localStorage.removeItem('admin_token'); token = null;
+  document.getElementById('dashboard').classList.remove('show');
+  document.getElementById('login-section').style.display = 'flex';
+  const err = document.getElementById('login-error');
+  err.textContent = msg || 'Session expirée, reconnectez-vous.';
+  err.style.display = 'block';
+}
+
 function showDashboard() {
   document.getElementById('login-section').style.display = 'none';
   document.getElementById('dashboard').classList.add('show');
   buildNav();
   buildImageFields();
+  checkTelegram();
   loadContent();
   loadBookings();
   loadReviews();
   loadMedia();
+}
+
+async function checkTelegram() {
+  try {
+    const res = await fetch('/api/admin/verify', { headers: { 'x-admin-token': token } });
+    if (!res.ok) return;
+    const data = await res.json();
+    const box = document.getElementById('tg-notice');
+    box.innerHTML = data.telegram ? '' : `
+      <div class="card" style="border-left:3px solid var(--amber);margin-bottom:22px">
+        <strong style="color:var(--amber)">⚠️ Notifications Telegram désactivées.</strong>
+        <p class="hint" style="margin-top:6px">Les réservations s'enregistrent bien ici, mais aucune alerte n'est envoyée sur Telegram.
+        Configurez <code>TELEGRAM_BOT_TOKEN</code> et <code>TELEGRAM_CHAT_ID</code> sur Railway pour les recevoir.</p>
+      </div>`;
+  } catch {}
 }
 
 /* ══════════════ NAV / TABS ══════════════ */
@@ -827,6 +854,7 @@ async function handleMediaFiles(files) {
 async function loadMedia() {
   initMediaDrop();
   const res = await fetch('/api/uploads', { headers: { 'x-admin-token': token } });
+  if (res.status === 401) return forceLogin();
   if (!res.ok) return;
   const files = await res.json();
   counts.media = files.length;
@@ -857,6 +885,7 @@ async function deleteMedia(filename) {
 /* ══════════════ BOOKINGS ══════════════ */
 async function loadBookings() {
   const res = await fetch('/api/bookings', { headers: { 'x-admin-token': token } });
+  if (res.status === 401) return forceLogin();
   if (!res.ok) return;
   const bookings = (await res.json()).reverse();
   counts.bookings = bookings.length;
@@ -943,8 +972,8 @@ function toast(msg, err = false) {
 
 /* ══════════════ INIT ══════════════ */
 if (token) {
-  fetch('/api/content', { headers: { 'x-admin-token': token } })
-    .then(r => { if (r.ok) showDashboard(); else localStorage.removeItem('admin_token'); })
+  fetch('/api/admin/verify', { headers: { 'x-admin-token': token } })
+    .then(r => { if (r.ok) showDashboard(); else { localStorage.removeItem('admin_token'); token = null; } })
     .catch(() => {});
 }
 </script>

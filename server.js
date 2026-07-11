@@ -93,25 +93,28 @@ function generateToken(password) {
 }
 
 // ─── Telegram Bot ───
+const TELEGRAM_ENABLED =
+  TELEGRAM_BOT_TOKEN && TELEGRAM_BOT_TOKEN !== 'YOUR_BOT_TOKEN' &&
+  TELEGRAM_CHAT_ID && TELEGRAM_CHAT_ID !== 'YOUR_CHAT_ID';
+
 async function sendTelegram(text, inlineKeyboard = null) {
-  const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-  const body = {
-    chat_id: TELEGRAM_CHAT_ID,
-    text,
-    parse_mode: 'HTML'
-  };
-  if (inlineKeyboard) {
-    body.reply_markup = JSON.stringify({ inline_keyboard: inlineKeyboard });
+  if (!TELEGRAM_ENABLED) {
+    console.warn('⚠️  Telegram non configuré (TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID) — notification ignorée.');
+    return { ok: false, reason: 'not_configured' };
   }
+  const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+  const body = { chat_id: TELEGRAM_CHAT_ID, text, parse_mode: 'HTML' };
+  if (inlineKeyboard) body.reply_markup = JSON.stringify({ inline_keyboard: inlineKeyboard });
   try {
     const resp = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
     });
-    return await resp.json();
+    const data = await resp.json();
+    if (!data.ok) console.error('Telegram API a répondu:', JSON.stringify(data));
+    return data;
   } catch (e) {
     console.error('Telegram error:', e.message);
+    return { ok: false, reason: e.message };
   }
 }
 
@@ -123,6 +126,11 @@ app.post('/api/admin/login', (req, res) => {
   } else {
     res.status(401).json({ error: 'Mot de passe incorrect' });
   }
+});
+
+// Vérifie qu'un jeton est encore valide (endpoint authentifié, contrairement à /api/content)
+app.get('/api/admin/verify', authAdmin, (req, res) => {
+  res.json({ ok: true, telegram: TELEGRAM_ENABLED });
 });
 
 // ─── CONTENT API ───
@@ -351,4 +359,8 @@ app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.listen(PORT, () => {
   console.log(`IMAGE-E-NATION server running on port ${PORT}`);
   console.log(`Admin panel: ${BASE_URL}/admin`);
+  console.log(`Stockage photos : ${USE_CLOUDINARY ? 'Cloudinary' : 'disque (' + UPLOADS_DIR + ')'}`);
+  console.log(`Données : ${DATA_DIR}`);
+  if (TELEGRAM_ENABLED) console.log('Telegram : activé ✓');
+  else console.warn('⚠️  Telegram : DÉSACTIVÉ — définissez TELEGRAM_BOT_TOKEN et TELEGRAM_CHAT_ID pour recevoir les notifications de RDV.');
 });
