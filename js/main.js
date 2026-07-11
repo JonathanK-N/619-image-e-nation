@@ -1,7 +1,7 @@
 'use strict';
 
 /* ================================================================
-   IMAGE-E-NATION By 6i9 — main.js
+   IMAGE-E-NATION By 6Ⅰ9 — main.js
    ================================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {

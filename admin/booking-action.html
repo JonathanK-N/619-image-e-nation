@@ -27,7 +27,7 @@
 <body>
   <div class="card">
     <h1 id="page-title">Rendez-vous</h1>
-    <p class="subtitle">IMAGE-E-NATION By 6i9</p>
+    <p class="subtitle">IMAGE-E-NATION By 6Ⅰ9</p>
     <div class="info" id="booking-info">Chargement...</div>
     <div id="action-area">
       <p class="question" id="question-text">Comment souhaitez-vous notifier le client ?</p>
@@ -113,11 +113,11 @@
       if (!booking) return;
       const confirmed = action === 'confirm';
       const subject = confirmed
-        ? 'Confirmation de votre rendez-vous — IMAGE-E-NATION By 6i9'
-        : 'Concernant votre demande de rendez-vous — IMAGE-E-NATION By 6i9';
+        ? 'Confirmation de votre rendez-vous — IMAGE-E-NATION By 6Ⅰ9'
+        : 'Concernant votre demande de rendez-vous — IMAGE-E-NATION By 6Ⅰ9';
       const body = confirmed
-        ? `Bonjour ${booking.name},\n\nC'est avec plaisir que je confirme votre rendez-vous (${booking.event_type || 'séance photo'}). Je reviens vers vous pour finaliser les détails.\n\nUn dépôt de 30 % est requis pour valider la réservation.\n\nÀ très bientôt,\nIMAGE-E-NATION By 6i9`
-        : `Bonjour ${booking.name},\n\nMerci pour votre demande de rendez-vous. Malheureusement, je ne suis pas en mesure d'y donner suite pour la date souhaitée. N'hésitez pas à me recontacter pour d'autres disponibilités.\n\nCordialement,\nIMAGE-E-NATION By 6i9`;
+        ? `Bonjour ${booking.name},\n\nC'est avec plaisir que je confirme votre rendez-vous (${booking.event_type || 'séance photo'}). Je reviens vers vous pour finaliser les détails.\n\nUn dépôt de 30 % est requis pour valider la réservation.\n\nÀ très bientôt,\nIMAGE-E-NATION By 6Ⅰ9`
+        : `Bonjour ${booking.name},\n\nMerci pour votre demande de rendez-vous. Malheureusement, je ne suis pas en mesure d'y donner suite pour la date souhaitée. N'hésitez pas à me recontacter pour d'autres disponibilités.\n\nCordialement,\nIMAGE-E-NATION By 6Ⅰ9`;
 
       let link;
       if (selectedMethod === 'email') {
