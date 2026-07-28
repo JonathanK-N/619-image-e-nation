@@ -252,16 +252,21 @@ app.post('/api/bookings/:id/request-review', authAdmin, async (req, res) => {
   const booking = bookings.find(b => b.id === id);
   if (!booking) return res.status(404).json({ error: 'Non trouvé' });
 
-  const reviewLink = `${baseUrl(req)}/leave-review.html?bookingId=${id}&name=${encodeURIComponent(booking.name)}`;
+  const base = baseUrl(req);
+  const nameEnc = encodeURIComponent(booking.name);
+  // Page d'action : le photographe choisit d'écrire au client par Email ou WhatsApp
+  const actionLink = `${base}/admin/review-request?id=${id}&name=${nameEnc}`;
+  // Lien direct du formulaire d'avis (au cas où)
+  const reviewLink = `${base}/leave-review.html?bookingId=${id}&name=${nameEnc}`;
 
   await sendTelegram(
-    `🎬 <b>Séance terminée!</b>\n\n` +
-    `👤 ${booking.name}\n📧 ${booking.email}\n📱 ${booking.phone || 'N/A'}\n\n` +
-    `Lien avis: ${reviewLink}`,
-    [[{ text: '📝 Demander un avis', url: reviewLink }]]
+    `🎬 <b>Séance terminée !</b>\n\n` +
+    `👤 <b>${booking.name}</b>\n📧 ${booking.email}\n📱 ${booking.phone || 'N/A'}\n\n` +
+    `Invitez le client à laisser un avis :`,
+    [[{ text: '📩 Contacter le client (Email / WhatsApp)', url: actionLink }]]
   );
 
-  res.json({ success: true });
+  res.json({ success: true, actionLink, reviewLink });
 });
 
 // ─── REVIEWS API ───
@@ -387,6 +392,11 @@ app.delete('/api/uploads/:id', authAdmin, async (req, res) => {
     console.error('Delete error:', e.message);
     res.status(500).json({ error: 'Suppression échouée' });
   }
+});
+
+// ─── REVIEW REQUEST PAGE (from Telegram) ───
+app.get('/admin/review-request', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin', 'review-request.html'));
 });
 
 // ─── SPA fallback ───

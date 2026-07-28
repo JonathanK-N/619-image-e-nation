@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demander un avis — IMAGE-E-NATION By 6Ⅰ9</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #0a0a0a; color: #e0e0e0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .card { background: #111; border: 1px solid #222; border-radius: 16px; padding: 40px 32px; max-width: 440px; width: 100%; text-align: center; }
+    h1 { font-size: 1rem; letter-spacing: 0.18em; margin-bottom: 8px; }
+    .subtitle { font-size: 0.8rem; color: #888; margin-bottom: 24px; }
+    .info { text-align: left; background: #0a0a0a; border: 1px solid #1c1c1c; border-radius: 10px; padding: 16px; margin-bottom: 22px; font-size: 0.82rem; line-height: 1.8; }
+    .info strong { color: #fff; }
+    .question { font-size: 0.85rem; margin-bottom: 16px; color: #ccc; }
+    .methods { display: flex; gap: 12px; justify-content: center; margin-bottom: 8px; }
+    .method-btn { flex: 1; padding: 15px; border: 1px solid #333; background: #1a1a1a; color: #fff; font-size: 0.82rem; font-weight: 600; cursor: pointer; border-radius: 10px; transition: all 0.2s; }
+    .method-btn:hover { border-color: #fff; background: #222; }
+    .method-btn.email:hover { border-color: #4a9eff; }
+    .method-btn.whatsapp:hover { border-color: #25d366; }
+    .hint { font-size: 0.72rem; color: #666; margin-top: 14px; }
+    .result { display: none; margin-top: 18px; padding: 14px; font-size: 0.85rem; border-radius: 10px; }
+    .result.success { display: block; background: #12251a; color: #2ecc71; }
+    .result.error { display: block; background: #2a1414; color: #e74c3c; }
+    .review-link { display: inline-block; margin-top: 12px; font-size: 0.72rem; color: #4a9eff; word-break: break-all; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>📝 Demander un avis</h1>
+    <p class="subtitle">IMAGE-E-NATION By 6Ⅰ9</p>
+    <div class="info" id="booking-info">Chargement…</div>
+    <p class="question">Comment souhaitez-vous inviter le client à laisser un avis ?</p>
+    <div class="methods">
+      <button class="method-btn email" onclick="send('email')">📧 Email</button>
+      <button class="method-btn whatsapp" onclick="send('whatsapp')">📱 WhatsApp</button>
+    </div>
+    <p class="hint">Un message pré-rempli avec le lien d'avis s'ouvrira.</p>
+    <a class="review-link" id="review-link" href="#" target="_blank"></a>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const bookingId = params.get('id');
+    const nameParam = params.get('name') || '';
+    let booking = null;
+
+    const reviewLink = `${location.origin}/leave-review.html?bookingId=${encodeURIComponent(bookingId)}&name=${encodeURIComponent(nameParam)}`;
+
+    // Charge les infos client (endpoint public par ID)
+    fetch(`/api/bookings/${bookingId}`)
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(b => {
+        booking = b;
+        // met à jour le lien avec le vrai nom si dispo
+        const link = `${location.origin}/leave-review.html?bookingId=${encodeURIComponent(bookingId)}&name=${encodeURIComponent(b.name || nameParam)}`;
+        const a = document.getElementById('review-link');
+        a.href = link; a.textContent = link;
+        document.getElementById('booking-info').innerHTML =
+          `<strong>Nom :</strong> ${b.name}<br>` +
+          `<strong>Email :</strong> ${b.email || 'Non fourni'}<br>` +
+          `<strong>Tél :</strong> ${b.phone || 'Non fourni'}<br>` +
+          `<strong>Prestation :</strong> ${b.event_type || 'Séance photo'}`;
+      })
+      .catch(() => {
+        const a = document.getElementById('review-link');
+        a.href = reviewLink; a.textContent = reviewLink;
+        document.getElementById('booking-info').textContent = 'Réservation introuvable (ID : ' + bookingId + ')';
+      });
+
+    function send(method) {
+      const b = booking || { name: nameParam, email: '', phone: '' };
+      const link = (booking && booking.name)
+        ? `${location.origin}/leave-review.html?bookingId=${encodeURIComponent(bookingId)}&name=${encodeURIComponent(booking.name)}`
+        : reviewLink;
+
+      const msg =
+        `Bonjour ${b.name || ''},\n\n` +
+        `Merci d'avoir fait confiance à IMAGE-E-NATION By 6Ⅰ9 pour votre séance ! ` +
+        `J'espère que le résultat vous plaît.\n\n` +
+        `Votre avis compte énormément : pourriez-vous prendre un instant pour le partager ici ?\n${link}\n\n` +
+        `Merci infiniment,\nIMAGE-E-NATION By 6Ⅰ9`;
+
+      let url;
+      if (method === 'email') {
+        const subject = 'Votre avis sur votre séance — IMAGE-E-NATION By 6Ⅰ9';
+        if (!b.email) { showResult('Aucun email fourni par ce client. Utilisez WhatsApp.', true); return; }
+        url = `mailto:${b.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(msg)}`;
+      } else {
+        const phone = (b.phone || '').replace(/[^\d]/g, '');
+        if (!phone) { showResult('Aucun numéro fourni par ce client. Utilisez Email.', true); return; }
+        url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+      }
+      showResult(`Ouverture de ${method === 'email' ? "l'email" : 'WhatsApp'}…`, false);
+      window.location.href = url;
+    }
+
+    function showResult(text, isError) {
+      const el = document.getElementById('result');
+      el.className = 'result ' + (isError ? 'error' : 'success');
+      el.textContent = text;
+    }
+  </script>
+</body>
+</html>
