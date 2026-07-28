@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Action Avis — IMAGE-E-NATION</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #0a0a0a; color: #e0e0e0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .card { background: #111; border: 1px solid #222; padding: 40px 32px; max-width: 420px; width: 100%; text-align: center; }
+    h1 { font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 8px; }
+    .subtitle { font-size: 0.8rem; color: #888; margin-bottom: 24px; }
+    .info { text-align: left; background: #0a0a0a; border: 1px solid #1c1c1c; padding: 16px; margin-bottom: 24px; font-size: 0.82rem; line-height: 1.8; }
+    .info strong { color: #fff; }
+    .actions { display: flex; gap: 12px; }
+    .action-btn { flex: 1; padding: 14px; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; border: none; cursor: pointer; }
+    .btn-approve { background: #2ecc71; color: #000; }
+    .btn-reject { background: #e74c3c; color: #fff; }
+    .result { display: none; padding: 20px; font-size: 0.9rem; }
+    .result.success { color: #2ecc71; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Modération Avis</h1>
+    <p class="subtitle">IMAGE-E-NATION By 6Ⅰ9</p>
+    <div class="info" id="review-info">Chargement...</div>
+    <div class="actions" id="actions">
+      <button class="action-btn btn-approve" onclick="doAction('approve')">✅ Approuver</button>
+      <button class="action-btn btn-reject" onclick="doAction('reject')">🗑️ Rejeter</button>
+    </div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const reviewId = params.get('id');
+    const preAction = params.get('action');
+
+    // Load review info
+    fetch('/api/reviews?all=true')
+      .then(r => r.json())
+      .then(reviews => {
+        const r = reviews.find(x => x.id === reviewId);
+        if (r) {
+          document.getElementById('review-info').innerHTML =
+            `<strong>Nom:</strong> ${r.name}<br>` +
+            `<strong>Note:</strong> ${'⭐'.repeat(r.rating || 5)}<br>` +
+            `<strong>Message:</strong> "${r.message}"<br>` +
+            `<strong>Date:</strong> ${new Date(r.createdAt).toLocaleDateString('fr-CA')}`;
+        }
+      });
+
+    // Auto-execute if action is in URL
+    if (preAction === 'approve' || preAction === 'reject') {
+      // Show buttons anyway for confirmation
+    }
+
+    async function doAction(action) {
+      const res = await fetch(`/api/reviews/${reviewId}/action`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action })
+      });
+      document.getElementById('actions').style.display = 'none';
+      const result = document.getElementById('result');
+      result.style.display = 'block';
+      result.className = 'result success';
+      result.textContent = action === 'approve' ? '✓ Avis approuvé et publié sur le site.' : '✓ Avis rejeté et supprimé.';
+    }
+  </script>
+</body>
+</html>

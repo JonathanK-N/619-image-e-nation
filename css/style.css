@@ -1,5 +1,5 @@
 /* ================================================================
-   IMAGE-E-NATION By 6i9 — Design System
+   IMAGE-E-NATION By 6Ⅰ9 — Design System
    Style: Dark Luxury Minimalism | Black × White × Silver
    ================================================================ */
 
@@ -461,10 +461,10 @@ input, textarea, select { font-family: inherit; }
 
 .hero-title {
   font-family: var(--f-display);
-  font-size: clamp(3rem, 10vw, 9rem);
+  font-size: clamp(1.8rem, 7vw, 5.6rem);
   font-weight: 800;
-  line-height: 0.95;
-  letter-spacing: 0.04em;
+  line-height: 0.98;
+  letter-spacing: 0.015em;
   color: var(--c-white);
   display: flex;
   flex-direction: column;
@@ -472,7 +472,8 @@ input, textarea, select { font-family: inherit; }
   margin-bottom: var(--s-6);
 }
 
-.hero-line { display: block; }
+/* IMAGE-E-NATION reste sur une seule ligne (la taille s'adapte à l'écran) */
+.hero-line { display: block; white-space: nowrap; }
 
 .hero-line--accent {
   font-family: var(--f-serif);
@@ -799,24 +800,24 @@ input, textarea, select { font-family: inherit; }
   background: rgba(192,192,192,0.04);
 }
 
-/* Masonry-style grid */
+/* Masonry-style grid — auto rows pour supporter un nombre variable de photos */
 .portfolio-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 260px);
+  grid-auto-rows: clamp(200px, 24vw, 280px);
   gap: var(--s-2);
 }
 
 @media (max-width: 900px) {
   .portfolio-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(5, 220px);
+    grid-auto-rows: clamp(200px, 34vw, 240px);
   }
 }
 @media (max-width: 560px) {
   .portfolio-grid {
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(9, 240px);
+    grid-auto-rows: clamp(240px, 66vw, 320px);
   }
 }
 
@@ -1392,6 +1393,211 @@ a.contact-val:hover { color: var(--c-white); }
   font-size: 1rem;
   font-weight: 400;
   color: var(--c-white-dim);
+}
+
+/* ─── 18b. Offers (Services & Tarifs fusionnés) ─────────────── */
+.offers { background: var(--c-black); }
+
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-5);
+  margin-top: var(--s-10);
+}
+@media (max-width: 980px) { .offers-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 620px) { .offers-grid { grid-template-columns: 1fr; } }
+
+.offer-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, var(--c-black-card), var(--c-black-soft));
+  border: 1px solid var(--c-black-line);
+  border-radius: 14px;
+  padding: var(--s-8) var(--s-6) var(--s-6);
+  transition: transform var(--d-mid) var(--ease-out), border-color var(--d-mid), box-shadow var(--d-mid);
+}
+.offer-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--c-silver-mute);
+  box-shadow: 0 26px 60px rgba(0,0,0,0.5);
+}
+
+.offer-card--feature {
+  border-color: var(--c-silver-low);
+  background: linear-gradient(180deg, #16130c, var(--c-black-card));
+}
+.offer-badge {
+  position: absolute;
+  top: -1px; right: var(--s-5);
+  transform: translateY(-50%);
+  background: var(--c-silver);
+  color: var(--c-black);
+  font-family: var(--f-display);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+
+.offer-icon {
+  width: 52px; height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--c-black-line);
+  border-radius: 12px;
+  color: var(--c-silver);
+  margin-bottom: var(--s-5);
+}
+.offer-icon svg { width: 24px; height: 24px; }
+.offer-card--feature .offer-icon { border-color: var(--c-silver-low); color: var(--c-silver-hi); }
+
+.offer-title {
+  font-family: var(--f-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--c-white);
+  margin-bottom: var(--s-3);
+}
+.offer-desc {
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: var(--c-silver-mid);
+  margin-bottom: var(--s-5);
+}
+
+.offer-prices { list-style: none; margin: 0 0 var(--s-6); padding: var(--s-4) 0 0; border-top: 1px solid var(--c-black-line); }
+.offer-prices li {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--s-3); padding: var(--s-2) 0;
+}
+.offer-prices li span:first-child { font-size: 0.84rem; color: var(--c-silver-mid); }
+.offer-prices li span:last-child {
+  font-family: var(--f-serif);
+  font-size: 1.22rem;
+  font-weight: 500;
+  color: var(--c-white);
+  white-space: nowrap;
+}
+
+.offer-btn { margin-top: auto; width: 100%; justify-content: center; }
+
+.offer-card--info { background: var(--c-black-soft); }
+.offer-card--info .offer-prices { margin-bottom: 0; }
+
+.offers-note {
+  text-align: center;
+  margin-top: var(--s-10);
+  font-size: 0.82rem;
+  color: var(--c-silver-low);
+  letter-spacing: 0.03em;
+}
+
+/* Footer credit — Cognito Inc. */
+.footer-credit {
+  margin-top: var(--s-5);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--c-black-line);
+  text-align: center;
+  font-size: 0.76rem;
+  color: var(--c-silver-low);
+  letter-spacing: 0.04em;
+}
+.footer-credit a {
+  color: var(--c-silver);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--d-fast);
+}
+.footer-credit a:hover { color: var(--c-white); }
+
+/* ─── 18c. Booking Success Overlay ──────────────────────────── */
+.booking-success {
+  position: fixed; inset: 0; z-index: 2000;
+  display: flex; align-items: center; justify-content: center; padding: var(--s-6);
+  opacity: 0; visibility: hidden; transition: opacity var(--d-mid) var(--ease-out), visibility var(--d-mid);
+}
+.booking-success.open { opacity: 1; visibility: visible; }
+.bs-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.82); backdrop-filter: blur(8px); }
+.bs-card {
+  position: relative; z-index: 1; max-width: 440px; width: 100%; text-align: center;
+  background: linear-gradient(180deg, var(--c-black-card), var(--c-black-soft));
+  border: 1px solid var(--c-black-line); border-radius: 18px; padding: var(--s-12) var(--s-8) var(--s-8);
+  transform: translateY(24px) scale(0.96); transition: transform var(--d-slow) var(--ease-out);
+  box-shadow: 0 40px 120px rgba(0,0,0,0.7);
+}
+.booking-success.open .bs-card { transform: translateY(0) scale(1); }
+.bs-check { width: 86px; height: 86px; margin-bottom: var(--s-6); }
+.bs-check-circle {
+  stroke: var(--c-silver); stroke-width: 2.4; stroke-dasharray: 151; stroke-dashoffset: 151;
+}
+.bs-check-mark {
+  stroke: var(--c-white); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 48; stroke-dashoffset: 48;
+}
+.booking-success.open .bs-check-circle { animation: bsCircle 0.6s var(--ease-out) forwards; }
+.booking-success.open .bs-check-mark { animation: bsMark 0.4s 0.45s var(--ease-out) forwards; }
+.bs-title {
+  font-family: var(--f-serif); font-size: 2rem; font-weight: 500; color: var(--c-white);
+  margin-bottom: var(--s-3); letter-spacing: 0.01em;
+}
+.bs-text { font-size: 0.9rem; color: var(--c-silver-mid); line-height: 1.7; margin-bottom: var(--s-8); }
+.bs-card .btn { margin: 0 auto; }
+
+@keyframes bsCircle { to { stroke-dashoffset: 0; } }
+@keyframes bsMark { to { stroke-dashoffset: 0; } }
+
+/* ─── 18d. Responsive polish (tous écrans) ──────────────────── */
+/* Sécurité anti-débordement horizontal */
+html { overflow-x: hidden; }
+body { max-width: 100%; }
+.container { max-width: 1280px; }
+img, svg, video { max-width: 100%; }
+/* Évite qu'un mot/URL trop long élargisse la page */
+.about-body, .testi-quote, .offer-desc, .footer-tagline, p { overflow-wrap: break-word; }
+
+/* Grands écrans : on élargit légèrement pour ne pas paraître étriqué */
+@media (min-width: 1600px) {
+  .container { max-width: 1440px; }
+}
+
+/* Tablettes */
+@media (max-width: 1024px) {
+  .section { padding: var(--s-24) 0; }
+  .section-header { margin-bottom: var(--s-12); }
+}
+
+/* Téléphones */
+@media (max-width: 600px) {
+  .section-header { margin-bottom: var(--s-10); }
+  .section-sub { padding: 0 var(--s-4); }
+  /* Boutons pleine largeur et empilés dans le hero */
+  .hero-actions { flex-direction: column; width: 100%; max-width: 320px; margin-inline: auto; gap: var(--s-3); }
+  .hero-actions .btn { width: 100%; justify-content: center; }
+  .btn { padding: 14px 24px; }
+  /* Cartes prestations plus aérées */
+  .offer-card { padding: var(--s-6) var(--s-5) var(--s-5); }
+  .offer-badge { right: var(--s-4); }
+  /* Témoignages : moins de padding latéral */
+  .testi-card { padding: var(--s-10) var(--s-6); }
+  /* Portfolio filtres : centrés et espacés pour le tactile */
+  .portfolio-filters { gap: var(--s-1) var(--s-2); }
+}
+
+/* Très petits téléphones */
+@media (max-width: 380px) {
+  .hero-title { font-size: clamp(1.5rem, 8.5vw, 2rem); }
+  .brand-main { font-size: 0.74rem; letter-spacing: 0.2em; }
+  .brand-sub { letter-spacing: 0.3em; }
+  .container { padding: 0 var(--s-3); }
+}
+
+/* Écrans bas / paysage mobile : le hero ne force pas 100dvh */
+@media (max-height: 560px) and (orientation: landscape) {
+  .hero { min-height: 0; height: auto; padding: 120px 0 80px; }
+  .hero-badge, .hero-scroll { display: none; }
 }
 
 /* ─── 19. Reduced Motion ────────────────────────────────────── */

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laisser un Avis — IMAGE-E-NATION By 6Ⅰ9</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #0a0a0a; color: #e0e0e0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .card { background: #111; border: 1px solid #222; padding: 40px 32px; max-width: 480px; width: 100%; }
+    .brand { text-align: center; margin-bottom: 32px; }
+    .brand h1 { font-size: 0.8rem; letter-spacing: 0.3em; }
+    .brand span { font-size: 0.7rem; color: #666; font-style: italic; }
+    h2 { font-size: 1.1rem; margin-bottom: 4px; }
+    .sub { font-size: 0.8rem; color: #888; margin-bottom: 24px; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: #666; margin-bottom: 4px; }
+    .field input, .field textarea { width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #222; color: #fff; font-size: 0.9rem; font-family: inherit; }
+    .field textarea { min-height: 100px; resize: vertical; }
+    .stars { display: flex; gap: 8px; margin-bottom: 20px; }
+    .star { font-size: 1.8rem; cursor: pointer; color: #333; transition: color 0.2s; }
+    .star.active { color: #f1c40f; }
+    .submit-btn { width: 100%; padding: 14px; background: #fff; color: #000; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; border: none; cursor: pointer; }
+    .submit-btn:hover { background: #ddd; }
+    .submit-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
+    .result { text-align: center; display: none; padding: 32px 0; }
+    .result h3 { color: #2ecc71; margin-bottom: 8px; }
+    .result p { color: #888; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">
+      <h1>IMAGE-E-NATION</h1>
+      <span>By 6Ⅰ9</span>
+    </div>
+
+    <div id="form-area">
+      <h2>Votre Avis Compte</h2>
+      <p class="sub">Merci de partager votre expérience avec nous</p>
+
+      <div class="field">
+        <label>Votre Nom</label>
+        <input type="text" id="r-name" placeholder="Jean Dupont">
+      </div>
+
+      <div class="field">
+        <label>Votre Rôle / Occasion</label>
+        <input type="text" id="r-role" placeholder="Mariage — Juin 2024">
+      </div>
+
+      <div class="field">
+        <label>Note</label>
+        <div class="stars" id="stars">
+          <span class="star active" data-val="1">★</span>
+          <span class="star active" data-val="2">★</span>
+          <span class="star active" data-val="3">★</span>
+          <span class="star active" data-val="4">★</span>
+          <span class="star active" data-val="5">★</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Votre Message</label>
+        <textarea id="r-message" placeholder="Partagez votre expérience..."></textarea>
+      </div>
+
+      <button class="submit-btn" id="submit-btn" onclick="submitReview()">Envoyer mon avis</button>
+    </div>
+
+    <div class="result" id="result">
+      <h3>✓ Merci pour votre avis!</h3>
+      <p>Votre témoignage sera publié après validation.</p>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const nameParam = params.get('name');
+    if (nameParam) document.getElementById('r-name').value = nameParam;
+
+    let rating = 5;
+    document.querySelectorAll('.star').forEach(star => {
+      star.addEventListener('click', () => {
+        rating = parseInt(star.dataset.val);
+        document.querySelectorAll('.star').forEach((s, i) => {
+          s.classList.toggle('active', i < rating);
+        });
+      });
+    });
+
+    async function submitReview() {
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.textContent = 'Envoi...';
+
+      await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: document.getElementById('r-name').value,
+          role: document.getElementById('r-role').value,
+          rating,
+          message: document.getElementById('r-message').value,
+          bookingId: params.get('bookingId') || null
+        })
+      });
+
+      document.getElementById('form-area').style.display = 'none';
+      document.getElementById('result').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

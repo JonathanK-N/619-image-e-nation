@@ -1,0 +1,55 @@
+{
+  "hero": {
+    "eyebrow": "Photographe Professionnel",
+    "title": "IMAGE-E-NATION",
+    "subtitle": "By 6Ⅰ9",
+    "description": "Chaque instant figé dans le temps.<br>Chaque émotion capturée pour l'éternité.",
+    "image": "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1920&q=85"
+  },
+  "about": {
+    "eyebrow": "Notre Histoire",
+    "title": "L'Art de<br><em>Capturer l'Instant</em>",
+    "body1": "IMAGE-E-NATION By 6Ⅰ9 est bien plus qu'un service de photographie — c'est une vision artistique dédiée à immortaliser vos moments les plus précieux. Avec une passion pour la lumière, la composition et l'émotion authentique, nous transformons chaque prise de vue en œuvre d'art intemporelle.",
+    "body2": "Que ce soit pour un mariage grandiose, un portrait intime, un événement corporate ou un concert électrisant, notre expertise technique et notre sensibilité artistique garantissent des résultats qui vous laisseront sans voix.",
+    "signature": "— 6Ⅰ9, Fondateur & Photographe Principal",
+    "imageMain": "https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=700&q=80",
+    "imageSecond": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=450&q=80",
+    "kpiNum": "+25",
+    "kpiLabel": "Événements"
+  },
+  "offerings": {
+    "eyebrow": "Nos Prestations",
+    "title": "Services & <em>Tarifs</em>",
+    "note": "Dépôt de 30 % requis pour confirmer la réservation.",
+    "items": [
+      {"icon": "portrait", "title": "Portrait individuel", "desc": "Des portraits authentiques qui révèlent votre personnalité et votre lumière intérieure.", "book": true, "bookType": "portrait", "prices": [{"label": "30 min", "price": "125 $"}, {"label": "1 h", "price": "185 $"}]},
+      {"icon": "couple", "title": "Couple", "desc": "Capturez la complicité et les émotions partagées, en studio ou en extérieur.", "book": true, "bookType": "portrait", "prices": [{"label": "1 h", "price": "220 $"}]},
+      {"icon": "family", "title": "Famille", "desc": "Des souvenirs précieux réunissant petits et grands dans une ambiance naturelle.", "book": true, "bookType": "family", "prices": [{"label": "1 h", "price": "250 $"}, {"label": "1 h 30", "price": "375 $"}]},
+      {"icon": "event", "title": "Événements", "desc": "Conférences, galas, lancements — votre événement immortalisé avec élégance.", "book": true, "bookType": "corporate", "prices": [{"label": "1 h", "price": "185 $"}, {"label": "2 h", "price": "350 $"}]},
+      {"icon": "wedding", "title": "Mariage", "desc": "Le plus beau jour de votre vie raconté en images, de la préparation à la fête.", "book": true, "bookType": "wedding", "feature": true, "badge": "Le plus demandé", "prices": [{"label": "Essentiel — 2 h", "price": "500 $"}, {"label": "Classique — 5 h", "price": "1 100 $"}, {"label": "Prestige — 8 h", "price": "1 700 $"}]},
+      {"icon": "options", "title": "Options supplémentaires", "desc": "Personnalisez votre prestation selon vos besoins.", "book": false, "prices": [{"label": "Photo retouchée supp.", "price": "10 $"}, {"label": "Livraison express (48 h)", "price": "50 $"}, {"label": "Déplacement hors secteur", "price": "selon distance"}]}
+    ]
+  },
+  "portfolio": [
+    {"cat": "wedding", "catLabel": "Mariage", "title": "Célébration Éternelle", "size": "wide", "image": "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=900&q=80"},
+    {"cat": "portrait", "catLabel": "Portrait", "title": "Lumière Naturelle", "size": "", "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80"},
+    {"cat": "concert", "catLabel": "Concert", "title": "Scène Électrique", "size": "", "image": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&q=80"},
+    {"cat": "event", "catLabel": "Événement", "title": "Soirée Corporate", "size": "", "image": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80"},
+    {"cat": "portrait", "catLabel": "Portrait", "title": "Portrait Masculin", "size": "tall", "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80"},
+    {"cat": "concert", "catLabel": "Concert", "title": "Festival de Nuit", "size": "wide", "image": "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=900&q=80"},
+    {"cat": "wedding", "catLabel": "Mariage", "title": "Cérémonie Intime", "size": "", "image": "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80"},
+    {"cat": "event", "catLabel": "Événement", "title": "Gala de Luxe", "size": "", "image": "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&q=80"},
+    {"cat": "portrait", "catLabel": "Portrait", "title": "Beauté Naturelle", "size": "", "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&q=80"}
+  ],
+  "stats": [
+    {"num": "25", "suffix": "+", "label": "Événements Couverts"},
+    {"num": "20", "suffix": "+", "label": "Clients Satisfaits"},
+    {"num": "2", "suffix": " ans", "label": "D'Expérience"},
+    {"num": "1000", "suffix": "+", "label": "Photos Livrées"}
+  ],
+  "contact": {
+    "phone": "+1 (514) 619-0000",
+    "email": "contact@imagenation6i9.com",
+    "location": "Montréal, Québec, Canada"
+  }
+}
